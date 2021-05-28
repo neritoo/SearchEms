@@ -4,7 +4,7 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
-documentos/
+documentos/*
 
 ### STS ###
 .apt_generated
