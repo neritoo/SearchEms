@@ -9,5 +9,7 @@ package com.gavilan.searchems.indexacion.services;
  * creando la lista de posteos asociada al vocabulario.
  */
 public interface IndexacionService {
+    void indexar();
 
+    void indexarDocumento();
 }
