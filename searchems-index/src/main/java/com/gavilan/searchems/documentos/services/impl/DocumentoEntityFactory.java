@@ -2,7 +2,9 @@ package com.gavilan.searchems.documentos.services.impl;
 
 import com.gavilan.searchems.documentos.infrastructure.entities.Documento;
 import com.gavilan.searchems.documentos.services.DocumentoFactory;
+import com.gavilan.searchems.documentos.util.DocumentoConstants;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -16,11 +18,20 @@ import java.io.File;
 @Slf4j
 public class DocumentoEntityFactory implements DocumentoFactory {
 
+    private final String baseUrl;
+
+    @Autowired
+    public DocumentoEntityFactory(String baseUrl) {
+        this.baseUrl = baseUrl;
+    }
+
     @Override
     public Documento create(File archivoDocumento) {
+        String apiUri = DocumentoConstants.API_DOCUMENTOS_URI;
+
         String titulo = archivoDocumento.getName();
-        String documentoUrl;
-        return new Documento();
+        String documentoUrl = baseUrl.concat(apiUri + titulo);
+        return new Documento(titulo, documentoUrl);
     }
 
 }

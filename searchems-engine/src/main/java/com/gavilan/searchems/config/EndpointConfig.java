@@ -1,6 +1,7 @@
 package com.gavilan.searchems.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
@@ -16,6 +17,7 @@ public class EndpointConfig {
 
     private String baseUrl;
 
+    @Bean
     public String baseUrl() {
         return this.baseUrl;
     }

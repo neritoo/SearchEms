@@ -1,8 +1,13 @@
 package com.gavilan.searchems.indexacion.services.impl;
 
+import com.gavilan.searchems.documentos.infrastructure.entities.Documento;
+import com.gavilan.searchems.documentos.infrastructure.repositories.DocumentoRepository;
+import com.gavilan.searchems.documentos.services.DocumentoFactory;
 import com.gavilan.searchems.documentos.util.DocumentoConstants;
 import com.gavilan.searchems.indexacion.exceptions.IndexingException;
 import com.gavilan.searchems.indexacion.services.IndexacionService;
+import com.gavilan.searchems.util.files.DirectoryReaderService;
+import com.gavilan.searchems.util.files.exceptions.FileException;
 import com.gavilan.searchems.vocabulario.domain.Vocabulario;
 import com.gavilan.searchems.vocabulario.exceptions.VocabularioException;
 import com.gavilan.searchems.vocabulario.services.VocabularioLoaderService;
@@ -15,6 +20,8 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Eze Gavilan
@@ -26,12 +33,38 @@ import java.nio.file.Paths;
 @Slf4j
 public class IndexacionServiceImpl implements IndexacionService {
 
+    private final DocumentoFactory documentoFactory;
     private final VocabularioLoaderService vocabularioLoader;
+
+    // de prueba
+    private final DocumentoRepository documentoRepository;
+    private final DirectoryReaderService directoryReaderService;
 
     @Override
     public void indexar() {
         File documentosDir = obtenerDirectorioDocumentos();
         cargarVocabulario(documentosDir);
+
+        // pruebas docs
+        List<Documento>  documentos = cargarDocumentos(documentosDir);
+        this.documentoRepository.saveAll(documentos);
+    }
+
+    private List<Documento> cargarDocumentos(File dir) {
+        List<File> files;
+        List<Documento> documentos = new ArrayList<>();
+        try {
+            files = directoryReaderService.readDirectory(dir, "txt");
+
+            String tituloActual;
+            for (File f: files) {
+                documentos.add(documentoFactory.create(f));
+            }
+        } catch (FileException e) {
+            e.printStackTrace();
+        }
+
+        return documentos;
     }
 
     @Override
