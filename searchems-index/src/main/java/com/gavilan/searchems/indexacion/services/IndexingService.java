@@ -8,7 +8,7 @@ package com.gavilan.searchems.indexacion.services;
  * Servicio que se encarga de realizar la indexación, cargando el vocabulario y, una vez cargado,
  * creando la lista de posteos asociada al vocabulario.
  */
-public interface IndexacionService {
+public interface IndexingService {
     void indexar();
 
     void indexarDocumento();

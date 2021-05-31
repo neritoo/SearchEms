@@ -3,7 +3,7 @@ package com.gavilan.searchems.indexacion.services.impl;
 import com.gavilan.searchems.documentos.services.DocumentoFactory;
 import com.gavilan.searchems.documentos.util.DocumentoConstants;
 import com.gavilan.searchems.indexacion.exceptions.IndexingException;
-import com.gavilan.searchems.indexacion.services.IndexacionService;
+import com.gavilan.searchems.indexacion.services.IndexingService;
 import com.gavilan.searchems.util.files.DirectoryReaderService;
 import com.gavilan.searchems.vocabulario.domain.Vocabulario;
 import com.gavilan.searchems.vocabulario.exceptions.VocabularioException;
@@ -12,11 +12,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
 /**
  * @author Eze Gavilan
@@ -26,7 +22,7 @@ import java.nio.file.Paths;
 @Service
 @AllArgsConstructor
 @Slf4j
-public class IndexacionServiceImpl implements IndexacionService {
+public class IndexingServiceImpl implements IndexingService {
 
     private final DocumentoFactory documentoFactory;
     private final VocabularioLoaderService vocabularioLoader;
@@ -68,16 +64,5 @@ public class IndexacionServiceImpl implements IndexacionService {
         log.info("Time[s]: " + timeSec);
         log.info("Time[m]: " + timeMin);
         log.info("Vocabulario Size: " + vocabulario.getMap().size());
-    }
-
-    @PostConstruct
-    private void init() {
-        try {
-            Files.createDirectories(Paths.get(DocumentoConstants.DIRECTORIO_DOCUMENTOS));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        this.indexar();
     }
 }
