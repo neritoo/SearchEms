@@ -7,6 +7,10 @@ import com.gavilan.searchems.indexacion.exceptions.IndexingException;
 import com.gavilan.searchems.indexacion.services.IndexingService;
 import com.gavilan.searchems.posteo.exceptions.PosteoNoEncontradoException;
 import com.gavilan.searchems.posteo.infrastucture.entities.Posteo;
+import com.gavilan.searchems.posteo.infrastucture.entities.PosteoItem;
+import com.gavilan.searchems.posteo.infrastucture.entities.PosteoItemPK;
+import com.gavilan.searchems.posteo.infrastucture.repositories.PosteoRepository;
+import com.gavilan.searchems.posteo.services.PosteoEntradaCreationService;
 import com.gavilan.searchems.posteo.services.PosteoFinderService;
 import com.gavilan.searchems.util.files.DirectoryReaderService;
 import com.gavilan.searchems.util.files.exceptions.FileException;
@@ -21,9 +25,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 /**
  * @author Eze Gavilan
@@ -41,6 +43,7 @@ public class IndexingServiceImpl implements IndexingService {
 
     private final DirectoryReaderService directoryReaderService;
     private final PosteoFinderService posteoFinder;
+    private final PosteoRepository posteoRepository;
 
     @Override
     public void indexar() {
@@ -75,7 +78,7 @@ public class IndexingServiceImpl implements IndexingService {
 
         List<File> archivos;
         try {
-            archivos = this.directoryReaderService.readDirectory(directorio, ".txt");
+            archivos = this.directoryReaderService.readDirectory(directorio, "txt");
         } catch (FileException e) {
             e.printStackTrace();
             return;
@@ -87,7 +90,7 @@ public class IndexingServiceImpl implements IndexingService {
         for (File doc: archivos) {
             // cada documento
             String documentoActual = doc.getName();
-            try (Scanner fileScanner = new Scanner(new BufferedReader(new FileReader(directorio.getPath()))) )  {
+            try (Scanner fileScanner = new Scanner(new BufferedReader(new FileReader(doc.getPath()))) )  {
                 fileScanner.useDelimiter(DELIMITER);
                 String terminoActual;
                 while (fileScanner.hasNext()) {
@@ -102,15 +105,20 @@ public class IndexingServiceImpl implements IndexingService {
                             e.printStackTrace();
                             return;
                         }
-                        
+                        p.getItemPorTitulo(documentoActual).sumarFrecuencia();
                     } else {
-
+                        PosteoItem posteoItem = new PosteoItem(new PosteoItemPK(terminoActual, null), 1);
+                        Posteo posteo = new Posteo(terminoActual, Collections.singletonList(posteoItem));
+                        listaPosteo.add(posteo);
                     }
                 }
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
         }
+
+        System.out.println("fin");
+        this.posteoRepository.saveAll(listaPosteo);
     }
 
     private void cargarVocabulario(File directorio) {

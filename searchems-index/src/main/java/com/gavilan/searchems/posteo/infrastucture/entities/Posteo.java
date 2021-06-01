@@ -30,4 +30,16 @@ public class Posteo {
         this.termino = termino;
         this.entradas = entradas;
     }
+
+    public PosteoItem getItemPorTitulo(String titulo) {
+        PosteoItem posteoItem = null;
+        for (PosteoItem posteoItemActual: entradas) {
+            if (posteoItemActual.getPosteoItemPK().getDocumento().getTitulo().equals(titulo)) {
+                posteoItem = posteoItemActual;
+                break;
+            }
+        }
+
+        return posteoItem;
+    }
 }

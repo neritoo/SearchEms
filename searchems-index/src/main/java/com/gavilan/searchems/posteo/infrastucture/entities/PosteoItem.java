@@ -27,4 +27,8 @@ public class PosteoItem {
         this.posteoItemPK = posteoItemPK;
         this.terminoFrecuency = terminoFrecuency;
     }
+
+    public void sumarFrecuencia() {
+        this.terminoFrecuency++;
+    }
 }
