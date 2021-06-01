@@ -33,5 +33,4 @@ public class DocumentoEntityFactory implements DocumentoFactory {
         String documentoUrl = baseUrl.concat(apiUri + titulo);
         return new Documento(titulo, documentoUrl);
     }
-
 }

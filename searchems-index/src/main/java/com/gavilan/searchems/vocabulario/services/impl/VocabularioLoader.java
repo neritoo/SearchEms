@@ -5,7 +5,6 @@ import com.gavilan.searchems.util.files.exceptions.FileException;
 import com.gavilan.searchems.vocabulario.domain.Vocabulario;
 import com.gavilan.searchems.vocabulario.exceptions.VocabularioException;
 import com.gavilan.searchems.vocabulario.services.VocabularioAgregadorService;
-import com.gavilan.searchems.vocabulario.services.VocabularioInstanceService;
 import com.gavilan.searchems.vocabulario.services.VocabularioLoaderService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -27,13 +26,12 @@ import java.util.Scanner;
 public class VocabularioLoader implements VocabularioLoaderService {
     private static final String DELIMITER = "[ .,\\n\\r\\[\\]'()\\-\":;0-9]";
 
-    private final VocabularioInstanceService vocabularioService;
     private final VocabularioAgregadorService vocabularioAgregadorService;
     private final DirectoryReaderService directoryReader;
 
     @Override
     public Vocabulario cargarVocabulario(File directorio) throws VocabularioException {
-        Vocabulario vocabulario = this.vocabularioService.getVocabulario();
+        Vocabulario vocabulario = Vocabulario.getInstance();
 
         List<File> archivosDir;
         try {

@@ -1,4 +1,4 @@
-package com.gavilan.searchems.posteo.entities;
+package com.gavilan.searchems.posteo.infrastucture.entities;
 
 import lombok.Data;
 
@@ -17,6 +17,10 @@ public class PosteoItem {
 
     public PosteoItem() {
 
+    }
+
+    public PosteoItem(PosteoItemPK posteoItemPK) {
+        this(posteoItemPK, 0);
     }
 
     public PosteoItem(PosteoItemPK posteoItemPK, int terminoFrecuency) {

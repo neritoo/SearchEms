@@ -1,6 +1,6 @@
 package com.gavilan.searchems.posteo.services.mock;
 
-import com.gavilan.searchems.posteo.entities.Posteo;
+import com.gavilan.searchems.posteo.infrastucture.entities.Posteo;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -15,7 +15,7 @@ public class PosteoService implements PosteoMockService {
     private final TerminoRepository terminoRepository;
 
     @Autowired
-    public PosteoService(PosteoRepository posteoRepository, TerminoRepository terminoRepository) {
+    public PosteoEntradaCreationService(PosteoRepository posteoRepository, TerminoRepository terminoRepository) {
         this.posteoRepository = posteoRepository;
         this.terminoRepository = terminoRepository;
     }

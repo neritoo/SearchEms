@@ -1,4 +1,4 @@
-package com.gavilan.searchems.posteo.entities;
+package com.gavilan.searchems.posteo.infrastucture.entities;
 
 import lombok.Data;
 

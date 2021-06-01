@@ -1,5 +1,6 @@
 package com.gavilan.searchems.vocabulario.services;
 
+import com.gavilan.searchems.vocabulario.domain.Vocabulario;
 import com.gavilan.searchems.vocabulario.exceptions.VocabularioException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -27,9 +28,6 @@ class VocabularioServiceTest {
     @Autowired
     VocabularioEntradaFinderService finderService;
 
-    @Autowired
-    VocabularioInstanceService instanceService;
-
     @BeforeEach
     void setUp() {
 
@@ -47,6 +45,6 @@ class VocabularioServiceTest {
             e.printStackTrace();
         }
 
-        log.info(String.valueOf(instanceService.getVocabulario().getMap().values().size()));
+        log.info(String.valueOf(Vocabulario.getInstance().getMap().values().size()));
     }
 }
