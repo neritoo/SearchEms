@@ -17,5 +17,5 @@ import java.io.File;
  * de manera individual, por esto, no se provee un servicio para hacerlo.
  */
 public interface DocumentoFactory {
-    Documento create(File archivoDocumento);
+    Documento create(String titulo);
 }

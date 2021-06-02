@@ -1,5 +1,6 @@
 package com.gavilan.searchems.vocabulario.services.impl;
 
+import com.gavilan.searchems.util.delimiter.Delimiter;
 import com.gavilan.searchems.util.files.DirectoryReaderService;
 import com.gavilan.searchems.util.files.exceptions.FileException;
 import com.gavilan.searchems.vocabulario.domain.Vocabulario;
@@ -24,7 +25,7 @@ import java.util.Scanner;
 @Service
 @AllArgsConstructor
 public class VocabularioLoader implements VocabularioLoaderService {
-    private static final String DELIMITER = "[ .,\\n\\r\\[\\]'()\\-\":;0-9]";
+    private static final String DELIMITER = Delimiter.DELIMITER;
 
     private final VocabularioAgregadorService vocabularioAgregadorService;
     private final DirectoryReaderService directoryReader;
@@ -53,7 +54,7 @@ public class VocabularioLoader implements VocabularioLoaderService {
             fileScanner.useDelimiter(DELIMITER);
 
             while (fileScanner.hasNext()) {
-                termino = fileScanner.next();
+                termino = fileScanner.next().toLowerCase();
                 if (! termino.isBlank()) {
                     agregarEntradaAlVocabulario(termino);
                 }

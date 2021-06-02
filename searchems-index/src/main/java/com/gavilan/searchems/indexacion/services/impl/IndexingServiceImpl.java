@@ -1,17 +1,17 @@
 package com.gavilan.searchems.indexacion.services.impl;
 
 import com.gavilan.searchems.documentos.infrastructure.entities.Documento;
+import com.gavilan.searchems.documentos.services.DocumentoBatchInsertService;
 import com.gavilan.searchems.documentos.services.DocumentoFactory;
 import com.gavilan.searchems.documentos.util.DocumentoConstants;
 import com.gavilan.searchems.indexacion.exceptions.IndexingException;
 import com.gavilan.searchems.indexacion.services.IndexingService;
-import com.gavilan.searchems.posteo.exceptions.PosteoNoEncontradoException;
 import com.gavilan.searchems.posteo.infrastucture.entities.Posteo;
 import com.gavilan.searchems.posteo.infrastucture.entities.PosteoItem;
 import com.gavilan.searchems.posteo.infrastucture.entities.PosteoItemPK;
 import com.gavilan.searchems.posteo.infrastucture.repositories.PosteoRepository;
-import com.gavilan.searchems.posteo.services.PosteoEntradaCreationService;
 import com.gavilan.searchems.posteo.services.PosteoFinderService;
+import com.gavilan.searchems.util.delimiter.Delimiter;
 import com.gavilan.searchems.util.files.DirectoryReaderService;
 import com.gavilan.searchems.util.files.exceptions.FileException;
 import com.gavilan.searchems.vocabulario.domain.Vocabulario;
@@ -36,7 +36,9 @@ import java.util.*;
 @AllArgsConstructor
 @Slf4j
 public class IndexingServiceImpl implements IndexingService {
-    private static final String DELIMITER = "[ .,\\n\\r\\[\\]'()\\-\":;0-9]";
+    private static final String DELIMITER = Delimiter.DELIMITER;
+
+    // TODO: Lógica de negocio para creación de la LISTA DE POSTEO implementarla en un servicio de dicho paquete, y usarlo aca.
 
     private final DocumentoFactory documentoFactory;
     private final VocabularioLoaderService vocabularioLoader;
@@ -44,12 +46,17 @@ public class IndexingServiceImpl implements IndexingService {
     private final DirectoryReaderService directoryReaderService;
     private final PosteoFinderService posteoFinder;
     private final PosteoRepository posteoRepository;
+    private final DocumentoBatchInsertService documentoBatchInsertService;
+
+    // Usamos HASHMAP como estructura de datos de soporte, previo a la insersión en BD...
+    private final Map<String, Posteo> posteoMap = new HashMap<>();
 
     @Override
     public void indexar() {
         File documentosDir = obtenerDirectorioDocumentos();
         cargarVocabulario(documentosDir);
         crearListaPosteo(documentosDir);
+        System.out.println(this.posteoMap.get("7").getEntradas().size());
     }
 
 
@@ -76,49 +83,33 @@ public class IndexingServiceImpl implements IndexingService {
         // 1. insert batch documentos
         // 2. insert batch lista de posteos
 
-        List<File> archivos;
-        try {
-            archivos = this.directoryReaderService.readDirectory(directorio, "txt");
-        } catch (FileException e) {
-            e.printStackTrace();
-            return;
-        }
+        // Posible solución si anda lento (multiples selects al verificar posteos): mantener la lista de posteos en un
+        // HASHMAP, y luego hacer la insesión a la base de datos.
+        long start, end;
+        float time;
 
-        List<Documento> documentos = new ArrayList<>();
+        List<File> archivos = obtenerArchivosDirectorio(directorio);
+        List<Documento> listaDocumentos = new ArrayList<>();
         List<Posteo> listaPosteo = new ArrayList<>();
 
+        log.info("Iniciando...");
+        start = System.currentTimeMillis();
         for (File doc: archivos) {
             // cada documento
-            String documentoActual = doc.getName();
-            try (Scanner fileScanner = new Scanner(new BufferedReader(new FileReader(doc.getPath()))) )  {
-                fileScanner.useDelimiter(DELIMITER);
-                String terminoActual;
-                while (fileScanner.hasNext()) {
-                    // cada palabra
-                    terminoActual = fileScanner.next();
+            String tituloActual = doc.getName();
+            Documento documentoActual = crearDocumento(tituloActual);
+            listaDocumentos.add(documentoActual);
 
-                    if (posteoFinder.existePosteo(terminoActual)) {
-                        Posteo p;
-                        try {
-                            p = posteoFinder.getPosteo(terminoActual);
-                        } catch (PosteoNoEncontradoException e) {
-                            e.printStackTrace();
-                            return;
-                        }
-                        p.getItemPorTitulo(documentoActual).sumarFrecuencia();
-                    } else {
-                        PosteoItem posteoItem = new PosteoItem(new PosteoItemPK(terminoActual, null), 1);
-                        Posteo posteo = new Posteo(terminoActual, Collections.singletonList(posteoItem));
-                        listaPosteo.add(posteo);
-                    }
-                }
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
+            indexarDoc(doc, tituloActual, documentoActual, listaPosteo);
         }
 
-        System.out.println("fin");
+        this.documentoBatchInsertService.guardarDocumentos(listaDocumentos);
         this.posteoRepository.saveAll(listaPosteo);
+        end = System.currentTimeMillis();
+        time = ((end - start) / 1000f);
+        log.info("Completado...");
+        log.info("Time[s]: " + time);
+        log.info("Time[m]: " + time / 60);
     }
 
     private void cargarVocabulario(File directorio) {
@@ -139,5 +130,52 @@ public class IndexingServiceImpl implements IndexingService {
         log.info("Time[s]: " + timeSec);
         log.info("Time[m]: " + timeMin);
         log.info("Vocabulario Size: " + vocabulario.getMap().size());
+    }
+
+    private List<File> obtenerArchivosDirectorio(File dir) {
+        List<File> archivos;
+        try {
+            archivos = this.directoryReaderService.readDirectory(dir, "txt");
+        } catch (FileException e) {
+            throw new IndexingException(e.getMessage());
+        }
+
+        return archivos;
+    }
+
+    private Documento crearDocumento(String titulo) {
+        return this.documentoFactory.create(titulo);
+    }
+
+    private void indexarDoc(File documentoFile, String titulo, Documento documento, List<Posteo> listaPosteo) {
+        try (Scanner fileScanner = new Scanner(new BufferedReader(new FileReader(documentoFile.getPath()))) )  {
+            fileScanner.useDelimiter(DELIMITER);
+            String terminoActual;
+            while (fileScanner.hasNext()) {
+                // cada palabra
+                terminoActual = fileScanner.next().toLowerCase();
+                if (terminoActual.isBlank()) continue;
+                if (this.posteoMap.containsKey(terminoActual)) {
+                    Posteo p = this.posteoMap.get(terminoActual);
+                    // Ya existe el posteo para ese término, pero es un NUEVO documento, por ende, hay que crear un
+                    // nuevo POSTEO ITEM
+                    // TODO: Al separar lógica usar servicios para ocultar detalles de implementación de CREAR nuevo post.
+                    if (p.getItemPorTitulo(titulo) == null) {
+                        PosteoItem posteoItem = new PosteoItem(new PosteoItemPK(terminoActual, documento), 1);
+                        p.getEntradas().add(posteoItem);
+                    } else {
+                        p.getItemPorTitulo(titulo).sumarFrecuencia();
+                    }
+                } else {
+                    PosteoItem posteoItem = new PosteoItem(new PosteoItemPK(terminoActual, documento), 1);
+                    Posteo posteo = new Posteo(terminoActual);
+                    posteo.getEntradas().add(posteoItem);
+                    listaPosteo.add(posteo);
+                    this.posteoMap.put(terminoActual, posteo);
+                }
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 }

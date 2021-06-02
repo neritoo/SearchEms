@@ -7,8 +7,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
-
 /**
  * @author Eze Gavilan
  * @project SearChems
@@ -26,10 +24,9 @@ public class DocumentoEntityFactory implements DocumentoFactory {
     }
 
     @Override
-    public Documento create(File archivoDocumento) {
+    public Documento create(String titulo) {
         String apiUri = DocumentoConstants.API_DOCUMENTOS_URI;
 
-        String titulo = archivoDocumento.getName();
         String documentoUrl = baseUrl.concat(apiUri + titulo);
         return new Documento(titulo, documentoUrl);
     }
