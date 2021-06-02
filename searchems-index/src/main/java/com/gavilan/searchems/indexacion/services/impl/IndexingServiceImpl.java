@@ -56,7 +56,6 @@ public class IndexingServiceImpl implements IndexingService {
         File documentosDir = obtenerDirectorioDocumentos();
         cargarVocabulario(documentosDir);
         crearListaPosteo(documentosDir);
-        System.out.println(this.posteoMap.get("7").getEntradas().size());
     }
 
 
@@ -103,6 +102,7 @@ public class IndexingServiceImpl implements IndexingService {
             indexarDoc(doc, tituloActual, documentoActual, listaPosteo);
         }
 
+        log.info("Insetando en BD...");
         this.documentoBatchInsertService.guardarDocumentos(listaDocumentos);
         this.posteoRepository.saveAll(listaPosteo);
         end = System.currentTimeMillis();
