@@ -4,7 +4,10 @@ import com.gavilan.searchems.documentos.infrastructure.entities.Documento;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import javax.persistence.*;
+import javax.persistence.Embeddable;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import java.io.Serializable;
 
 @Data
@@ -14,7 +17,7 @@ public class PosteoItemPK implements Serializable {
 
 
     private String termino;
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "documento_id")
     private Documento documento;
 

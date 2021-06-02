@@ -69,21 +69,6 @@ public class IndexingServiceImpl implements IndexingService {
     }
 
     private void crearListaPosteo(File directorio) {
-        // Primer algoritmo indexación de prueba.
-        // RECORDAR que el nr (cant doc del termino) se puede calcular accediendo vocabulario.termino.nr = posteo.termino? posteo.entradas.size
-
-        // por cada documento en directorio:
-        //     por cada palabra (termino) del documento actual:
-        //         1. verificar si existe posteo con termino:
-        //             si existe --> actualizar frecuencia termino al posteo item (tf++)
-        //             no existe --> crear posteo con su posteo item y tf = 1
-        //         2. agregar posteos nuevos a lista de posteos
-        //     1. crear documento y agregarlo a lista de documentos
-        // 1. insert batch documentos
-        // 2. insert batch lista de posteos
-
-        // Posible solución si anda lento (multiples selects al verificar posteos): mantener la lista de posteos en un
-        // HASHMAP, y luego hacer la insesión a la base de datos.
         long start, end;
         float time;
 
@@ -102,7 +87,7 @@ public class IndexingServiceImpl implements IndexingService {
             indexarDoc(doc, tituloActual, documentoActual, listaPosteo);
         }
 
-        log.info("Insetando en BD...");
+        log.info("Insertando en BD...");
         this.documentoBatchInsertService.guardarDocumentos(listaDocumentos);
         this.posteoRepository.saveAll(listaPosteo);
         end = System.currentTimeMillis();
