@@ -25,7 +25,10 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Scanner;
 
 /**
  * @author Eze Gavilan
@@ -48,14 +51,13 @@ public class IndexingServiceImpl implements IndexingService {
     private final DocumentoBatchInsertService documentoBatchInsertService;
     private final DocumentoRepository documentoRepository;
 
-    // Usamos HASHMAP como estructura de datos de soporte, previo a la insersión en BD...
-    private final List<Posteo> listaPosteo = new ArrayList<>();
-
     @Override
     public void indexar() {
         File documentosDir = obtenerDirectorioDocumentos();
         cargarVocabulario(documentosDir);
-        crearListaPosteo(documentosDir);
+        if (this.documentoRepository.findAll().size() == 0) {
+            crearListaPosteo(documentosDir);
+        }
     }
 
 
@@ -78,7 +80,6 @@ public class IndexingServiceImpl implements IndexingService {
             this.documentoRepository.save(documentoActual);
             // TODO: usar servicio de lista de posteo...
             // TODO: cambiar impl carga de vocabulario para hacerlo accediendo a la lista de posteo (p/ obtener maxFr & nr)
-            if (this.posteoRepository.findAll().size() != 0) continue;
             indexarDoc(doc, documentoActual);
         }
 
