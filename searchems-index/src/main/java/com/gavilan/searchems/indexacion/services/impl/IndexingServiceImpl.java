@@ -69,23 +69,20 @@ public class IndexingServiceImpl implements IndexingService {
     }
 
     private void crearListaPosteo(File directorio) {
-
         List<File> archivos = obtenerArchivosDirectorio(directorio);
-        List<Documento> listaDocumentos = new ArrayList<>();
 
         log.info("Iniciando...");
         for (File doc: archivos) {
-            // cada documento
-            String tituloActual = doc.getName();
-            Documento documentoActual = crearDocumento(tituloActual);
+            Documento documentoActual = crearDocumento(doc.getName());
+            // TODO: usar servicio de documentos...
             this.documentoRepository.save(documentoActual);
+            // TODO: usar servicio de lista de posteo...
+            // TODO: cambiar impl carga de vocabulario para hacerlo accediendo a la lista de posteo (p/ obtener maxFr & nr)
+            if (this.posteoRepository.findAll().size() != 0) continue;
             indexarDoc(doc, documentoActual);
         }
 
         log.info("Insertando en BD...");
-        //this.documentoBatchInsertService.guardarDocumentos(listaDocumentos);
-        //this.posteoRepository.saveAll(this.listaPosteo);
-
         log.info("Completado...");
     }
 
@@ -138,24 +135,15 @@ public class IndexingServiceImpl implements IndexingService {
                 Posteo p = currentDocumentMap.get(terminoActual);
                 if (p != null) {
                     p.aumentarFrecuency();
-                    /*
-                    // Ya existe el posteo para ese término, pero es un NUEVO documento, por ende, hay que crear un
-                    // nuevo POSTEO ITEM
-                    // TODO: Al separar lógica usar servicios para ocultar detalles de implementación de CREAR nuevo post.
-                    if (p.esDeDocumento(titulo)) {
-                        PosteoItem posteoItem = new PosteoItem(new PosteoItemPK(terminoActual, documento), 1);
-                        p.getEntradas().add(posteoItem);
-                    } else {
-                        p.getItemPorTitulo(titulo).sumarFrecuencia();
-                    }
-
-                     */
                 } else {
                     p = new Posteo(new PosteoPK(terminoActual, documento));
                     currentDocumentMap.put(terminoActual, p);
                     // Aprovechamos para sumar al vocabulario (en memoria) uno al nr:
                     // Se aumenta uno porque en este documento se creó su posteo para el término actual, lo que significa
                     // que, para este término actual, aumentó la cantidad de apariciones en docs que tuvo.
+
+                    // NOTA: Impl no sirve para cuando se inicia y ya existe la lista en la base de datos, porque no se
+                    // re-indexan los documentos, por ende el vocabulario tendrá inconsistencia con la lista de posteo.
                     Vocabulario.getInstance().findVocabularioEntrada(terminoActual).ifPresent(EntradaVocabulario::aumentarCantidadDocumentos);
                 }
 
