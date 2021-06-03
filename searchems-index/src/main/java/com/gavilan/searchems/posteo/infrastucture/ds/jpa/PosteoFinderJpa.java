@@ -33,6 +33,7 @@ public class PosteoFinderJpa implements PosteoFinderDsGateway {
     @Transactional(readOnly = true)
     @Override
     public boolean existsByTermino(String termino) {
-        return this.posteoRepository.existsByTermino(termino);
+        return false;
+        //return this.posteoRepository.existsByTermino(termino);
     }
 }

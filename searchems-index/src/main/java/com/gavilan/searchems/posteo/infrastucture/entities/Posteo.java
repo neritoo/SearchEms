@@ -2,44 +2,37 @@ package com.gavilan.searchems.posteo.infrastucture.entities;
 
 import lombok.Data;
 
-import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import javax.persistence.EmbeddedId;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "posteos")
 @Data
 public class Posteo {
 
-    @Id
-    private String termino;
-
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "posteo_termino")
-    private List<PosteoItem> entradas;
+    @EmbeddedId
+    private PosteoPK posteoPK;
+    private int terminoFrecuency;
 
     public Posteo() {
 
     }
 
-    public Posteo(String termino) {
-        this(termino, new ArrayList<>());
+    public Posteo(PosteoPK posteoPK) {
+        this(posteoPK, 1);
     }
 
-    public Posteo(String termino, List<PosteoItem> entradas) {
-        this.termino = termino;
-        this.entradas = entradas;
+    public Posteo(PosteoPK posteoPK, int terminoFrecuency) {
+        this.posteoPK = posteoPK;
+        this.terminoFrecuency = terminoFrecuency;
     }
 
-    public PosteoItem getItemPorTitulo(String titulo) {
-        PosteoItem posteoItem = null;
-        for (PosteoItem posteoItemActual: entradas) {
-            if (posteoItemActual.getPosteoItemPK().getDocumento().getTitulo().equals(titulo)) {
-                posteoItem = posteoItemActual;
-                break;
-            }
-        }
+    public boolean esDeDocumento(String titulo) {
+        return this.posteoPK.getDocumento().getTitulo().equals(titulo);
+    }
 
-        return posteoItem;
+    public void aumentarFrecuency() {
+        this.terminoFrecuency++;
     }
 }

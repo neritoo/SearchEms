@@ -45,4 +45,18 @@ public class EntradaVocabulario {
     public void registrarFrecuenciaMaxima(int frecuenciaMax) {
         this.setFrecuenciaMax(frecuenciaMax);
     }
+
+    /**
+     * Aumenta en 1 (uno) la frecuencia máxima para el término (Entrada).
+     */
+    public void aumentarFrecuenciaMaxima() {
+        this.frecuenciaMax++;
+    }
+
+    /**
+     * Aumenta la cantidad de documentos en las que apareció el término (nr).
+     */
+    public void aumentarCantidadDocumentos() {
+        this.cantDocumentos++;
+    }
 }
