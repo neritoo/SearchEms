@@ -1,4 +1,4 @@
-package com.gavilan.searchems.documentos.download;
+package com.gavilan.searchems.documentos.controllers.download;
 
 import com.gavilan.searchems.documentos.exceptions.DocumentoNoEncontradoException;
 import com.gavilan.searchems.documentos.exceptions.DocumentoNoExisteException;

@@ -19,7 +19,7 @@ import java.util.UUID;
  * @date 27/5/2021
  */
 @SpringBootTest
-@ActiveProfiles("default")
+@ActiveProfiles("mysql")
 class VocabularioServiceTest {
 
     private final Logger log = LoggerFactory.getLogger(VocabularioServiceTest.class);
