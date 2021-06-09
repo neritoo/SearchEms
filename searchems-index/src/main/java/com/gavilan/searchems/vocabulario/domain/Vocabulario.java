@@ -52,6 +52,14 @@ public class Vocabulario {
         return Optional.of(this.map.get(termino));
     }
 
+    /**
+     * Calcula y devuelve el tamaño del vocabulario (que es, el size del map que usamos como estructura)
+     * @return int tamaño del vocabulario, es decir, cantidad de términos.
+     */
+    public int size() {
+        return this.map.size();
+    }
+
     @Override
     public String toString() {
         return this.map.toString();

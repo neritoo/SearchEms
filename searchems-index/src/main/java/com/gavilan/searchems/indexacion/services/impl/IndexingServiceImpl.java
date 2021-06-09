@@ -29,9 +29,7 @@ public class IndexingServiceImpl implements IndexingService {
         File documentosDir = obtenerDirectorioDocumentos();
         crearListaPosteo(documentosDir);
         cargarVocabulario();
-        Vocabulario.getInstance().findVocabularioEntrada("many").ifPresent(x -> {
-            System.out.println(x.toString());
-        });
+        Vocabulario.getInstance().findVocabularioEntrada("many").ifPresent(System.out::println);
     }
 
     @Override
