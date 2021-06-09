@@ -11,4 +11,6 @@ import java.util.List;
  */
 public interface DocumentoCreationDsGateway {
     void saveAll(List<Documento> documentos);
+
+    Documento save(Documento documento);
 }

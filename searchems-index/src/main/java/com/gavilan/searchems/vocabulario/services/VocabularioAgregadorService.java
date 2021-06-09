@@ -12,5 +12,5 @@ import com.gavilan.searchems.vocabulario.exceptions.VocabularioException;
  * {@link EntradaVocabulario} al vocabulario.
  */
 public interface VocabularioAgregadorService {
-    void agregarNuevaEntrada(String termino) throws VocabularioException;
+    void agregarNuevaEntrada(String termino, int nr, int mf) throws VocabularioException;
 }

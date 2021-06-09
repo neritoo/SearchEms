@@ -41,7 +41,7 @@ class VocabularioServiceTest {
 
         try {
             for (int i = 0; i < 100000; i++) {
-                agregadorService.agregarNuevaEntrada(UUID.randomUUID().toString());
+                agregadorService.agregarNuevaEntrada(UUID.randomUUID().toString(), 0, 0);
             }
         } catch (VocabularioException e) {
             e.printStackTrace();

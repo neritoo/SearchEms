@@ -5,9 +5,8 @@ import com.gavilan.searchems.posteo.infrastucture.entities.Posteo;
 import com.gavilan.searchems.posteo.infrastucture.repositories.PosteoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import java.util.Collection;
 
 /**
  * @author Eze Gavilan
@@ -24,15 +23,13 @@ public class PosteoCreationJpa implements PosteoCreationDsGateway {
         this.posteoRepository = posteoRepository;
     }
 
-    @Transactional
     @Override
     public Posteo save(Posteo posteo) {
         return this.posteoRepository.save(posteo);
     }
 
-    @Transactional
     @Override
-    public void saveAll(List<Posteo> posteoList) {
+    public void saveAll(Collection<Posteo> posteoList) {
         this.posteoRepository.saveAll(posteoList);
     }
 }

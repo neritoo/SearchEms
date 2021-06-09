@@ -12,4 +12,6 @@ public interface PosteoFinderDsGateway {
     Posteo findByTermino(String termino) throws PosteoNoEncontradoException;
 
     boolean existsByTermino(String termino);
+
+    boolean loaded();
 }

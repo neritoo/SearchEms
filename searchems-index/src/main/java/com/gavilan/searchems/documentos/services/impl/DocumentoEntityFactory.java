@@ -1,5 +1,6 @@
 package com.gavilan.searchems.documentos.services.impl;
 
+import com.gavilan.searchems.documentos.infrastructure.ds.DocumentoCreationDsGateway;
 import com.gavilan.searchems.documentos.infrastructure.entities.Documento;
 import com.gavilan.searchems.documentos.services.DocumentoFactory;
 import com.gavilan.searchems.documentos.util.DocumentoConstants;
@@ -17,10 +18,12 @@ import org.springframework.stereotype.Service;
 public class DocumentoEntityFactory implements DocumentoFactory {
 
     private final String baseUrl;
+    private final DocumentoCreationDsGateway creationDsGateway;
 
     @Autowired
-    public DocumentoEntityFactory(String baseUrl) {
+    public DocumentoEntityFactory(String baseUrl, DocumentoCreationDsGateway creationDsGateway) {
         this.baseUrl = baseUrl;
+        this.creationDsGateway = creationDsGateway;
     }
 
     @Override
@@ -28,6 +31,6 @@ public class DocumentoEntityFactory implements DocumentoFactory {
         String apiUri = DocumentoConstants.API_DOCUMENTOS_URI;
 
         String documentoUrl = baseUrl.concat(apiUri + titulo);
-        return new Documento(titulo, documentoUrl);
+        return this.creationDsGateway.save(new Documento(titulo, documentoUrl));
     }
 }

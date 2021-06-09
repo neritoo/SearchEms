@@ -5,6 +5,7 @@ import com.gavilan.searchems.documentos.infrastructure.entities.Documento;
 import com.gavilan.searchems.documentos.infrastructure.repositories.DocumentoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -23,8 +24,15 @@ public class DocumentoCreationJpa implements DocumentoCreationDsGateway {
         this.documentoRepository = documentoRepository;
     }
 
+    @Transactional
     @Override
     public void saveAll(List<Documento> documentos) {
         this.documentoRepository.saveAll(documentos);
+    }
+
+    @Transactional
+    @Override
+    public Documento save(Documento documento) {
+        return this.documentoRepository.save(documento);
     }
 }

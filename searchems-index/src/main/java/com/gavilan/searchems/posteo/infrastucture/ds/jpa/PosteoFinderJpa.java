@@ -36,4 +36,10 @@ public class PosteoFinderJpa implements PosteoFinderDsGateway {
         return false;
         //return this.posteoRepository.existsByTermino(termino);
     }
+
+    @Transactional(readOnly = true)
+    @Override
+    public boolean loaded() {
+        return this.posteoRepository.estaListaCargada() == 1;
+    }
 }

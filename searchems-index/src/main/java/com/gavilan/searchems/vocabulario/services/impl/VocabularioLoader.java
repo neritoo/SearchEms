@@ -1,21 +1,14 @@
 package com.gavilan.searchems.vocabulario.services.impl;
 
-import com.gavilan.searchems.util.delimiter.Delimiter;
-import com.gavilan.searchems.util.files.DirectoryReaderService;
-import com.gavilan.searchems.util.files.exceptions.FileException;
+import com.gavilan.searchems.posteo.services.PosteoEntradaMappingService;
 import com.gavilan.searchems.vocabulario.domain.Vocabulario;
 import com.gavilan.searchems.vocabulario.exceptions.VocabularioException;
 import com.gavilan.searchems.vocabulario.services.VocabularioAgregadorService;
 import com.gavilan.searchems.vocabulario.services.VocabularioLoaderService;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.util.List;
-import java.util.Scanner;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author Eze Gavilan
@@ -24,47 +17,34 @@ import java.util.Scanner;
  */
 @Service
 @AllArgsConstructor
+@Slf4j
 public class VocabularioLoader implements VocabularioLoaderService {
-    private static final String DELIMITER = Delimiter.DELIMITER;
 
-    private final VocabularioAgregadorService vocabularioAgregadorService;
-    private final DirectoryReaderService directoryReader;
+    private final VocabularioAgregadorService vocabularioAgregador;
+    private final PosteoEntradaMappingService posteoEntradaMappingService;
 
+    @Transactional
     @Override
-    public Vocabulario cargarVocabulario(File directorio) throws VocabularioException {
+    public Vocabulario cargarVocabulario() {
         Vocabulario vocabulario = Vocabulario.getInstance();
 
-        List<File> archivosDir;
-        try {
-            archivosDir = this.directoryReader.readDirectory(directorio, "txt");
-        } catch (FileException e) {
-            throw new VocabularioException(e.getMessage());
-        }
-
-        for (File documento: archivosDir) {
-            llenarVocabulario(documento);
-        }
+        long start, end;
+        float time;
+        log.info("Iniciando carga del vocabulario");
+        start = System.currentTimeMillis();
+        posteoEntradaMappingService.findEntradasVocabulario().forEach(entry -> {
+            try {
+                vocabularioAgregador.agregarNuevaEntrada(entry.getTermino(), entry.getCantDocumentos(), entry.getFrecuenciaMax());
+            } catch (VocabularioException e) {
+                e.printStackTrace();
+            }
+        });
+        log.info("Carga Completada");
+        end = System.currentTimeMillis();
+        time = (end - start) / 1000f;
+        System.out.println("Time[s]: " + time);
+        System.out.println("Time[m]: " + time / 60);
 
         return vocabulario;
-    }
-
-    private void llenarVocabulario(File file) throws VocabularioException {
-        String termino;
-        try (Scanner fileScanner = new Scanner(new BufferedReader(new FileReader(file.getPath())))) {
-            fileScanner.useDelimiter(DELIMITER);
-
-            while (fileScanner.hasNext()) {
-                termino = fileScanner.next().toLowerCase();
-                if (! termino.isBlank()) {
-                    agregarEntradaAlVocabulario(termino);
-                }
-            }
-        } catch (FileNotFoundException e) {
-            throw new VocabularioException(e.getMessage());
-        }
-    }
-
-    private void agregarEntradaAlVocabulario(String termino) throws VocabularioException {
-        this.vocabularioAgregadorService.agregarNuevaEntrada(termino);
     }
 }

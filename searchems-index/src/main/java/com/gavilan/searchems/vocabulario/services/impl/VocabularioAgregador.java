@@ -17,10 +17,10 @@ import org.springframework.stereotype.Service;
 public class VocabularioAgregador implements VocabularioAgregadorService {
 
     @Override
-    public void agregarNuevaEntrada(String termino) throws VocabularioException {
+    public void agregarNuevaEntrada(String termino, int nr, int maxFrec) throws VocabularioException {
         //Vocabulario vocabulario = vocabularioInstance.getVocabulario();
         //EntradaVocabulario entrada = new EntradaVocabulario(termino);
 
-        Vocabulario.getInstance().agregarEntrada(new EntradaVocabulario(termino));
+        Vocabulario.getInstance().agregarEntrada(new EntradaVocabulario(termino, nr, maxFrec));
     }
 }
