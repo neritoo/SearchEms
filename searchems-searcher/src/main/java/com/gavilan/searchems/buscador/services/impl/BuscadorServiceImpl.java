@@ -2,7 +2,6 @@ package com.gavilan.searchems.buscador.services.impl;
 
 import com.gavilan.searchems.buscador.services.BuscadorService;
 import com.gavilan.searchems.documentos.services.DocumentoCountService;
-import com.gavilan.searchems.posteo.services.PosteoFinderService;
 import com.gavilan.searchems.rankeo.domain.RankingDocumento;
 import com.gavilan.searchems.rankeo.services.RankingService;
 import com.gavilan.searchems.vocabulario.domain.EntradaVocabulario;
@@ -27,9 +26,8 @@ import java.util.stream.Collectors;
 @Slf4j
 @AllArgsConstructor
 public class BuscadorServiceImpl implements BuscadorService {
-    private static final int R = 15;
+    private static final int R = 30;
 
-    private final PosteoFinderService posteoFinder;
     private final DocumentoCountService documentoCountService;
     private final VocabularioEntradaFinderService vocabularioEntradaFinderService;
     private final RankingService  rankingService;
