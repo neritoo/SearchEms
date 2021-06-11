@@ -37,30 +37,7 @@ public class RankingServiceImpl implements RankingService {
 
         ranking.ordenarRanking();
         ranking.comprimirListaRanking(R);
-        //ranking.getLd().forEach(System.out::println);
-
-        // modificar para que otro método genere la paginación...
-        /*
-        PagedListHolder<RankingDocumento> page = new PagedListHolder<>(ranking.getLd());
-        page.setPageSize(4);
-        page.setPage(3);
-         */
-
-        List<RankingDocumento> currentPage;
-
-        int start = (int) pageable.getOffset();
-
-        int limit = (int) pageable.getOffset() + pageable.getPageSize();
-        if (limit >= ranking.size()) limit = ranking.size();
-
-
-        if (start >= ranking.size()) currentPage = new ArrayList<>();
-        else currentPage = ranking.getLd().subList(start, limit);
-
-        ranking.getLd().forEach(System.out::println);
-
-        Page<RankingDocumento> rankingPage = new PageImpl<>(currentPage, pageable, ranking.size());
-        return rankingPage;
+        return generarPaginacionRanking(pageable, ranking);
     }
 
     private void ordenarTerminosMayorIdf(List<EntradaVocabulario> terminos) {
@@ -92,5 +69,22 @@ public class RankingServiceImpl implements RankingService {
 
     private float calcularPeso(int tf, int N, int nr) {
         return (float) (tf * Math.log( ( (float) N / nr) ));
+    }
+
+    private Page<RankingDocumento> generarPaginacionRanking(Pageable pageable, Ranking ranking) {
+        List<RankingDocumento> currentPage;
+
+        int start = (int) pageable.getOffset();
+
+        int limit = (int) pageable.getOffset() + pageable.getPageSize();
+        if (limit >= ranking.size()) limit = ranking.size();
+
+
+        if (start >= ranking.size()) currentPage = new ArrayList<>();
+        else currentPage = ranking.getLd().subList(start, limit);
+
+        ranking.getLd().forEach(System.out::println);
+
+        return new PageImpl<>(currentPage, pageable, ranking.size());
     }
 }
