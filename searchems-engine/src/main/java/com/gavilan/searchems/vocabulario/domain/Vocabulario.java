@@ -49,7 +49,9 @@ public class Vocabulario {
      * @return {@link EntradaVocabulario} encontrada.
      */
     public Optional<EntradaVocabulario> findVocabularioEntrada(String termino) {
-        return Optional.of(this.map.get(termino));
+        EntradaVocabulario entrada = this.map.get(termino);
+        if (entrada == null) return Optional.empty();
+        return Optional.of(entrada);
     }
 
     /**

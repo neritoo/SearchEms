@@ -29,4 +29,10 @@ public class DocumentoFinderJpa implements DocumentoFinderDsGateway {
         return this.documentoRepository.findById(id)
                 .orElseThrow(() -> new DocumentoNoEncontradoException("No eixste el documento " + id));
     }
+
+    @Transactional(readOnly = true)
+    @Override
+    public long count() {
+        return this.documentoRepository.count();
+    }
 }

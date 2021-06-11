@@ -1,19 +1,22 @@
 package com.gavilan.searchems.buscador.services.impl;
 
 import com.gavilan.searchems.buscador.services.BuscadorService;
-import com.gavilan.searchems.documentos.dto.DocumentoDto;
-import com.gavilan.searchems.posteo.dto.PosteoDto;
-import com.gavilan.searchems.posteo.infrastucture.repositories.PosteoRepository;
+import com.gavilan.searchems.documentos.services.DocumentoCountService;
 import com.gavilan.searchems.posteo.services.PosteoFinderService;
-import com.gavilan.searchems.rankeo.domain.Ranking;
 import com.gavilan.searchems.rankeo.domain.RankingDocumento;
+import com.gavilan.searchems.rankeo.services.RankingService;
 import com.gavilan.searchems.vocabulario.domain.EntradaVocabulario;
-import com.gavilan.searchems.vocabulario.domain.Vocabulario;
+import com.gavilan.searchems.vocabulario.services.VocabularioEntradaFinderService;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author Eze Gavilan
@@ -22,49 +25,32 @@ import java.util.List;
  */
 @Service
 @Slf4j
+@AllArgsConstructor
 public class BuscadorServiceImpl implements BuscadorService {
-    private static final int R = 10;
+    private static final int R = 15;
 
     private final PosteoFinderService posteoFinder;
-    private final PosteoRepository posteoRepository;
-
-    @Autowired
-    public BuscadorServiceImpl(PosteoFinderService posteoFinder, PosteoRepository posteoRepository) {
-        this.posteoFinder = posteoFinder;
-        this.posteoRepository = posteoRepository;
-    }
+    private final DocumentoCountService documentoCountService;
+    private final VocabularioEntradaFinderService vocabularioEntradaFinderService;
+    private final RankingService  rankingService;
 
     @Override
-    public Ranking buscarDocumentosConsulta(String consulta) {
-        String terminoPrueba = "irresistible";
-        EntradaVocabulario entry = Vocabulario.getInstance().findVocabularioEntrada(terminoPrueba).get();
-        Ranking ranking = new Ranking();
-        long s, e;
-        float t;
-        s = System.currentTimeMillis();
-        List<PosteoDto> posteos = this.posteoFinder.findTopR(terminoPrueba, R);
-        e = System.currentTimeMillis();
-        t = (e - s) / 1000f;
-        log.info("Tiempo consulta BD[s]: " + t);
+    public Page<RankingDocumento> buscarDocumentosConsulta(Pageable pageable, String consulta) {
+        List<EntradaVocabulario> terminos = obtenerTerminosConsulta(consulta);
+        int totalDocumentos = this.documentoCountService.count();
 
-        for (PosteoDto posteo: posteos) {
+        return this.rankingService.generarRanking(pageable, terminos, R, totalDocumentos);
+    }
 
-            DocumentoDto docActual = posteo.getDocumento();
-            float peso = 0;
-            RankingDocumento documento;
-            if (ranking.obtenerDocumento(docActual).isEmpty()) {
-                documento = new RankingDocumento(docActual);
-                ranking.agregarDocumento(documento);
-            } else {
-                documento = ranking.obtenerDocumento(docActual).get();
-            }
+    private List<EntradaVocabulario> obtenerTerminosConsulta(String q) {
+        List<String> palabras = Arrays.stream(q.split(" "))
+                .map(String::toLowerCase)
+                .collect(Collectors.toList());
 
-            peso += posteo.getTf() * Math.log((593f / entry.getCantDocumentos()));
-            documento.aumentarIr(peso);
-        }
+        List<EntradaVocabulario> entradas = new ArrayList<>();
+        palabras.forEach(palabra ->
+            this.vocabularioEntradaFinderService.find(palabra).ifPresent(entradas::add));
 
-        ranking.ordenarRanking();
-        ranking.getLd().forEach(System.out::println);
-        return null;
+        return entradas;
     }
 }

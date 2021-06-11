@@ -11,5 +11,5 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface DocumentoRepository extends JpaRepository<Documento, String> {
-
+    long count();
 }

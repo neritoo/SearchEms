@@ -1,7 +1,11 @@
 package com.gavilan.searchems.buscador.controllers;
 
 import com.gavilan.searchems.buscador.services.BuscadorService;
+import com.gavilan.searchems.rankeo.domain.RankingDocumento;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,9 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author Eze Gavilan
@@ -30,16 +33,18 @@ public class BuscadorController {
     }
 
     @GetMapping("/buscador")
-    public ResponseEntity<?> buscarConsulta(@RequestParam(name = "consulta") String consulta) {
-        System.out.println("Consulta: " + consulta);
+    public ResponseEntity<?> buscarConsulta(@RequestParam(name = "page") Integer page,
+                                            @RequestParam(name = "consulta") String consulta) {
+        Map<String, Object> response = new HashMap<>();
+        Pageable pageable = PageRequest.of(page, 4);
+        Page<RankingDocumento> ranking;
 
-        // Obviamente esto no lo hace la API, si no que el servicio que debemos implementar (probablemente "BuscadorService").
-        // Es más, debería hacerlo otro service llamado, por ej.: "SeparadorPalabras", pero podría hacerse en un método
-        // privado del BuscadorService...
-        List<String> terminos = Arrays.stream(consulta.split(" "))
-                .map(String::toLowerCase).collect(Collectors.toList());
-        terminos.forEach(System.out::println);
+        ranking = this.buscadorService.buscarDocumentosConsulta(pageable, consulta);
 
+        if (ranking.getContent().size() == 0) {
+            response.put("mensaje", "Lista vacía");
+            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+        }
         // La API, entonces, deberá DELEGAR la consulta a un servicio, que nos devolverá un LISTADO DOCUMENTOS más
         // relevantes de la consulta, que es lo que "mostraremos" (devolveremos)...
 
@@ -62,7 +67,7 @@ public class BuscadorController {
         BuscadorController ( --> BuscadorService)
 
         Posibles métodos:
-        buscarDocumentos()
+        buscarDocumentosConsulta()
         procesarTermino()     --> comenzar con término con mayor idf (menor nr da un idf mayor)
         obtenerListaPosteo()  --> obtenerlos ordenados desc por tf
         recuperarDocumentos() --> R es la cant. documentos a recuperar
@@ -81,8 +86,8 @@ public class BuscadorController {
         Continuar con el siguiente término de la consulta q.
         Devolver R primeros documentos del Ranking (ld, con ir más alto).
          */
-        buscadorService.buscarDocumentosConsulta("lala");
-        return new ResponseEntity<>("OK", HttpStatus.OK);
+        response.put("ranking", ranking);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
 }

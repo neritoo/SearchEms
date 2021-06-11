@@ -1,6 +1,8 @@
 package com.gavilan.searchems.buscador.services;
 
-import com.gavilan.searchems.rankeo.domain.Ranking;
+import com.gavilan.searchems.rankeo.domain.RankingDocumento;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 /**
  * @author Eze Gavilan
@@ -8,5 +10,5 @@ import com.gavilan.searchems.rankeo.domain.Ranking;
  * @date 11/6/2021
  */
 public interface BuscadorService {
-    Ranking buscarDocumentosConsulta(String consulta);
+    Page<RankingDocumento> buscarDocumentosConsulta(Pageable pageable, String consulta);
 }

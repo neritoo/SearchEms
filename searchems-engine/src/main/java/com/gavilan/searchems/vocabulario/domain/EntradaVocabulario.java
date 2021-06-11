@@ -10,7 +10,7 @@ import lombok.ToString;
  */
 @Data
 @ToString
-public class EntradaVocabulario {
+public class EntradaVocabulario implements Comparable<EntradaVocabulario> {
 
     private String termino;
     private int cantDocumentos;
@@ -30,33 +30,8 @@ public class EntradaVocabulario {
         this.frecuenciaMax = frecuenciaMax;
     }
 
-    /**
-     * Registra la cantidad de documentos (nr) en las que aparece el término de la entrada.
-     * @param cantDocumentos int nr.
-     */
-    public void registrarCantidadDocumentos(int cantDocumentos) {
-        this.setCantDocumentos(cantDocumentos);
-    }
-
-    /**
-     * Registra la frecuencia máxima (maxTf) asociada al término de la entrada.
-     * @param frecuenciaMax int maxTf.
-     */
-    public void registrarFrecuenciaMaxima(int frecuenciaMax) {
-        this.setFrecuenciaMax(frecuenciaMax);
-    }
-
-    /**
-     * Aumenta en 1 (uno) la frecuencia máxima para el término (Entrada).
-     */
-    public void aumentarFrecuenciaMaxima() {
-        this.frecuenciaMax++;
-    }
-
-    /**
-     * Aumenta la cantidad de documentos en las que apareció el término (nr).
-     */
-    public void aumentarCantidadDocumentos() {
-        this.cantDocumentos++;
+    @Override
+    public int compareTo(EntradaVocabulario o) {
+        return (o.getCantDocumentos() - this.getCantDocumentos());
     }
 }
