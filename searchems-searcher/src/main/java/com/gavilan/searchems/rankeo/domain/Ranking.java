@@ -3,7 +3,9 @@ package com.gavilan.searchems.rankeo.domain;
 import com.gavilan.searchems.documentos.dto.DocumentoDto;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,7 +15,7 @@ import java.util.Optional;
  * @date 11/6/2021
  */
 @Data
-public class Ranking {
+public class Ranking implements Serializable {
 
     private List<RankingDocumento> ld;
 
@@ -31,6 +33,10 @@ public class Ranking {
                 return Optional.of(rd);
         }
         return Optional.empty();
+    }
+
+    public void ordenarRanking() {
+        this.ld.sort(Comparator.naturalOrder());
     }
 
     @Override

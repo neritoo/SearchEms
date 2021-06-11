@@ -35,7 +35,7 @@ public class BuscadorServiceImpl implements BuscadorService {
     }
 
     @Override
-    public List<RankingDocumento> buscarDocumentosConsulta(String consulta) {
+    public Ranking buscarDocumentosConsulta(String consulta) {
         String terminoPrueba = "irresistible";
         EntradaVocabulario entry = Vocabulario.getInstance().findVocabularioEntrada(terminoPrueba).get();
         Ranking ranking = new Ranking();
@@ -63,6 +63,7 @@ public class BuscadorServiceImpl implements BuscadorService {
             documento.aumentarIr(peso);
         }
 
+        ranking.ordenarRanking();
         ranking.getLd().forEach(System.out::println);
         return null;
     }

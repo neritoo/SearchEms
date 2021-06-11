@@ -4,6 +4,8 @@ import com.gavilan.searchems.documentos.dto.DocumentoDto;
 import lombok.Getter;
 import lombok.ToString;
 
+import java.io.Serializable;
+
 /**
  * @author Eze Gavilan
  * @project SearchEms
@@ -11,7 +13,7 @@ import lombok.ToString;
  */
 @Getter
 @ToString
-public class RankingDocumento {
+public class RankingDocumento implements Serializable, Comparable<RankingDocumento> {
 
     private DocumentoDto documento;
     private float indiceRanking;
@@ -23,6 +25,11 @@ public class RankingDocumento {
     public RankingDocumento(DocumentoDto documento) {
         this.documento = documento;
         this.indiceRanking = 0f;
+    }
+
+    @Override
+    public int compareTo(RankingDocumento o) {
+        return (int) (o.indiceRanking - this.indiceRanking);
     }
 
     public void aumentarIr(float cantidad) {

@@ -1,8 +1,6 @@
 package com.gavilan.searchems.buscador.services;
 
-import com.gavilan.searchems.rankeo.domain.RankingDocumento;
-
-import java.util.List;
+import com.gavilan.searchems.rankeo.domain.Ranking;
 
 /**
  * @author Eze Gavilan
@@ -10,5 +8,5 @@ import java.util.List;
  * @date 11/6/2021
  */
 public interface BuscadorService {
-    List<RankingDocumento> buscarDocumentosConsulta(String consulta);
+    Ranking buscarDocumentosConsulta(String consulta);
 }

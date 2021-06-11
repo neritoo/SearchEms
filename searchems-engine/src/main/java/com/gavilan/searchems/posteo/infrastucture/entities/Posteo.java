@@ -2,17 +2,16 @@ package com.gavilan.searchems.posteo.infrastucture.entities;
 
 import lombok.Data;
 
-import javax.persistence.EmbeddedId;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
-@Table(name = "posteos")
+@Table(name = "posteos", indexes = @Index(name = "search", columnList = "termino, termino_frecuency"))
 @Data
 public class Posteo {
 
     @EmbeddedId
     private PosteoPK posteoPK;
+    @Column(name = "termino_frecuency")
     private int terminoFrecuency;
 
     public Posteo() {
