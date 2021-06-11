@@ -1,12 +1,13 @@
 package com.gavilan.searchems.posteo.infrastucture.ds.jpa;
 
-import com.gavilan.searchems.posteo.exceptions.PosteoNoEncontradoException;
 import com.gavilan.searchems.posteo.infrastucture.ds.PosteoFinderDsGateway;
 import com.gavilan.searchems.posteo.infrastucture.entities.Posteo;
 import com.gavilan.searchems.posteo.infrastucture.repositories.PosteoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
  * @author Eze Gavilan
@@ -25,9 +26,14 @@ public class PosteoFinderJpa implements PosteoFinderDsGateway {
 
     @Transactional(readOnly = true)
     @Override
-    public Posteo findByTermino(String termino) throws PosteoNoEncontradoException {
-        return this.posteoRepository.findById(termino)
-                .orElseThrow(() -> new PosteoNoEncontradoException("No existe el posteo con término: " + termino));
+    public List<Posteo> findByTermino(String termino) {
+        return this.posteoRepository.findAllByPosteoPKTermino(termino);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<Posteo> findByTermino(String termino, int r) {
+        return this.posteoRepository.findTop10ByPosteoPKTerminoOrderByTerminoFrecuencyDesc(termino);
     }
 
     @Transactional(readOnly = true)

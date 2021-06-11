@@ -1,5 +1,7 @@
 package com.gavilan.searchems.buscador.controllers;
 
+import com.gavilan.searchems.buscador.services.BuscadorService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,6 +21,13 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api")
 public class BuscadorController {
+
+    private final BuscadorService buscadorService;
+
+    @Autowired
+    public BuscadorController(BuscadorService buscadorService) {
+        this.buscadorService = buscadorService;
+    }
 
     @GetMapping("/buscador")
     public ResponseEntity<?> buscarConsulta(@RequestParam(name = "consulta") String consulta) {
@@ -47,7 +56,7 @@ public class BuscadorController {
 
         Posibles clases:
         Ranking (ld: RankingDocumento[])
-        RankingDocumento (ir: int, documento: Documento)
+        RankingDocumento (ir: int, documento: DocumentoDto)
         RankeoService ( --> algun service del paquete Posteo)
         BuscadorService ( --> RankeoService)
         BuscadorController ( --> BuscadorService)
@@ -72,6 +81,7 @@ public class BuscadorController {
         Continuar con el siguiente término de la consulta q.
         Devolver R primeros documentos del Ranking (ld, con ir más alto).
          */
+        buscadorService.buscarDocumentosConsulta("lala");
         return new ResponseEntity<>("OK", HttpStatus.OK);
     }
 

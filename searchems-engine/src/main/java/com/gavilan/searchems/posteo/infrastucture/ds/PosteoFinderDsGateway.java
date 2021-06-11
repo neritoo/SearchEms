@@ -1,7 +1,8 @@
 package com.gavilan.searchems.posteo.infrastucture.ds;
 
-import com.gavilan.searchems.posteo.exceptions.PosteoNoEncontradoException;
 import com.gavilan.searchems.posteo.infrastucture.entities.Posteo;
+
+import java.util.List;
 
 /**
  * @author Eze Gavilan
@@ -9,7 +10,9 @@ import com.gavilan.searchems.posteo.infrastucture.entities.Posteo;
  * @date 1/6/2021
  */
 public interface PosteoFinderDsGateway {
-    Posteo findByTermino(String termino) throws PosteoNoEncontradoException;
+    List<Posteo> findByTermino(String termino);
+
+    List<Posteo> findByTermino(String termino, int r);
 
     boolean existsByTermino(String termino);
 

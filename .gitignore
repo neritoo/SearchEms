@@ -4,7 +4,7 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
-documentos/*
+documentoEntities/*
 
 ### STS ###
 .apt_generated
@@ -33,4 +33,4 @@ build/
 
 ### VS Code ###
 .vscode/
-/documentos/
+/documentoEntities/

@@ -26,8 +26,8 @@ public class DocumentoCreationJpa implements DocumentoCreationDsGateway {
 
     @Transactional
     @Override
-    public void saveAll(List<Documento> documentos) {
-        this.documentoRepository.saveAll(documentos);
+    public void saveAll(List<Documento> documentoEntities) {
+        this.documentoRepository.saveAll(documentoEntities);
     }
 
     @Transactional

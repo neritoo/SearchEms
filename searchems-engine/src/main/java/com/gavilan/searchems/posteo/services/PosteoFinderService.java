@@ -1,7 +1,8 @@
 package com.gavilan.searchems.posteo.services;
 
-import com.gavilan.searchems.posteo.exceptions.PosteoNoEncontradoException;
-import com.gavilan.searchems.posteo.infrastucture.entities.Posteo;
+import com.gavilan.searchems.posteo.dto.PosteoDto;
+
+import java.util.List;
 
 /**
  * @author Eze Gavilan
@@ -9,7 +10,7 @@ import com.gavilan.searchems.posteo.infrastucture.entities.Posteo;
  * @date 1/6/2021
  */
 public interface PosteoFinderService {
-    Posteo getPosteo(String termino) throws PosteoNoEncontradoException;
+    List<PosteoDto> find(String termino);
 
-    boolean existePosteo(String termino);
+    List<PosteoDto> findTopR(String termino, int r);
 }

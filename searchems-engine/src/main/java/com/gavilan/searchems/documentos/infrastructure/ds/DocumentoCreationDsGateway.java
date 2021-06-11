@@ -10,7 +10,7 @@ import java.util.List;
  * @date 1/6/2021
  */
 public interface DocumentoCreationDsGateway {
-    void saveAll(List<Documento> documentos);
+    void saveAll(List<Documento> documentoEntities);
 
     Documento save(Documento documento);
 }
