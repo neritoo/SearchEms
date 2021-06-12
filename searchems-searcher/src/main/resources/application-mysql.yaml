@@ -12,7 +12,7 @@ spring:
         order_updates: true
         batch_versioned_data: true
         jdbc:
-          batch_size: 300
+          batch_size: 1000
         dialect: org.hibernate.dialect.MySQL8Dialect
     hibernate:
       ddl-auto: update
