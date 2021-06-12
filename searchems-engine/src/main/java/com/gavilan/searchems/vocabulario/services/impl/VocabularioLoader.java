@@ -39,11 +39,13 @@ public class VocabularioLoader implements VocabularioLoaderService {
                 e.printStackTrace();
             }
         });
-        log.info("Carga Completada");
+
         end = System.currentTimeMillis();
         time = (end - start) / 1000f;
-        System.out.println("Time[s]: " + time);
-        System.out.println("Time[m]: " + time / 60);
+        log.info("Time[s]: " + time);
+        log.info("Time[m]: " + time / 60);
+
+        log.info("Carga Completada");
 
         return vocabulario;
     }

@@ -3,15 +3,19 @@ package com.gavilan.searchems.indexacion.services;
 import java.io.File;
 
 /**
- * @author Eze Gavilan
- * @project SearChems
- * @date 28/5/2021
- *
- * Servicio que se encarga de realizar la indexación, cargando el vocabulario y, una vez cargado,
- * creando la lista de posteos asociada al vocabulario.
+ * Implementación del patrón "Template Method", donde tenemos dos métodos primitivos: cargarListaPosteo() y cargarVocbulario(),
+ * los cuales dependen de quien implemente la clase, que determina si la indexación es a nivel de directorio o de documento
+ * individual.
+ * El método plantilla en este caso sería indexar(), quien determina el orden de ejecución de los algoritmos para indexar.
  */
-public interface IndexingService {
-    void indexar();
+public abstract class IndexingService {
 
-    void indexarDocumento(File file);
+    public void indexar(File archivo) {
+        cargarListaPosteo(archivo);
+        cargarVocabulario();
+    }
+
+    public abstract void cargarListaPosteo(File archivo);
+
+    public abstract void cargarVocabulario();
 }

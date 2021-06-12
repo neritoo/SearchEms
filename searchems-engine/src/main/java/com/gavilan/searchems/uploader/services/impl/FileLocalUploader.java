@@ -22,22 +22,24 @@ import java.nio.file.Paths;
 public class FileLocalUploader implements FileUploaderService {
 
     @Override
-    public String uploadFile(File file) throws FileException {
+    public File uploadFile(File file) throws FileException {
         String filename = file.getName();
         Path filePath = getPath(filename);
 
         try (FileInputStream fis = new FileInputStream(file)) {
             Files.copy(fis, filePath);
         } catch (FileAlreadyExistsException e) {
-            deleteFile(file);
+            deleteOldFile(file);
             throw new FileException("Ya existe un archivo con el nombre: " + filename);
         } catch (IOException e) {
-            deleteFile(file);
+            deleteOldFile(file);
             throw new FileException(e.getMessage());
         }
 
-        deleteFile(file);
-        return filename;
+        deleteOldFile(file);
+        Path newFilePath = getPath(filename);
+        File newFile = newFilePath.toFile();
+        return newFile;
     }
 
     private Path getPath(String filename) {
@@ -45,7 +47,7 @@ public class FileLocalUploader implements FileUploaderService {
         return Paths.get(RUTA_DIR).resolve(filename).toAbsolutePath();
     }
 
-    private void deleteFile(File file) {
+    private void deleteOldFile(File file) {
         if (! file.delete()) log.error("Error al eliminar archivo de carga");
     }
 }

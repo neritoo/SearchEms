@@ -1,7 +1,7 @@
 package com.gavilan.searchems.indexacion.bootstrap;
 
 import com.gavilan.searchems.documentos.util.DocumentoConstants;
-import com.gavilan.searchems.indexacion.services.Indexador;
+import com.gavilan.searchems.indexacion.services.IndexingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.CommandLineRunner;
@@ -15,17 +15,17 @@ import java.io.File;
 @Component
 public class IndexingLoader implements CommandLineRunner {
 
-    private final Indexador indexador;
+    private final IndexingService indexingService;
 
     @Autowired
-    public IndexingLoader(@Qualifier("indexadorDirectorio") Indexador indexador) {
-        this.indexador = indexador;
+    public IndexingLoader(@Qualifier("indexadorDirectorio") IndexingService indexingService) {
+        this.indexingService = indexingService;
     }
 
     @Override
     public void run(String... args) throws Exception {
         File documentosDir = obtenerDirectorioDocumentos();
-        this.indexador.indexar(documentosDir);
+        this.indexingService.indexar(documentosDir);
     }
 
     private File obtenerDirectorioDocumentos() {

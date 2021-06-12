@@ -1,5 +1,7 @@
 package com.gavilan.searchems.indexacion.services;
 
+import com.gavilan.searchems.indexacion.exceptions.IndexingException;
+
 import java.io.File;
 
 /**
@@ -7,5 +9,5 @@ import java.io.File;
  * lo que requiere su indexación.
  */
 public interface AgregarNuevoDocumentoService {
-    void registrarNuevoDocumento(File file);
+    void registrarNuevoDocumento(File file) throws IndexingException;
 }
