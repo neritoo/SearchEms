@@ -52,6 +52,8 @@ public class ListaPosteoCreator implements ListaPosteoCreationService {
             Documento documentoActual = crearDocumento(doc.getName());
             indexarDoc(doc, documentoActual);
         }
+
+        log.info("Creando índices posteo");
         crearIndex();
         end = System.currentTimeMillis();
         time = (end - start) / 1000f;

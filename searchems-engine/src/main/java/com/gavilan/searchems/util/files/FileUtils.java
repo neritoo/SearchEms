@@ -17,4 +17,9 @@ public class FileUtils {
 
         return archivoConvertido;
     }
+
+    public static boolean validateExtension(File file, String ext) {
+        ext = ".".concat(ext);
+        return file.getName().endsWith(ext);
+    }
 }

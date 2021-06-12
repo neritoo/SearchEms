@@ -30,7 +30,7 @@ public class DirectoryReaderServiceImpl implements DirectoryReaderService {
     private List<File> cargarArchivos(File dir, String ext) {
         List<File> files = new ArrayList<>();
         Stream.of(Objects.requireNonNull(dir
-                .listFiles((file, name) -> name.endsWith(".".concat(ext)))))
+                .listFiles((file) -> FileUtils.validateExtension(file, ext))))
                 .filter(f -> f.isFile() && ! f.isHidden())
                 .forEach(files::add);
         return files;
