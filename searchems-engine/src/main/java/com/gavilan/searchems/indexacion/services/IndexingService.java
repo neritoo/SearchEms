@@ -1,5 +1,7 @@
 package com.gavilan.searchems.indexacion.services;
 
+import java.io.File;
+
 /**
  * @author Eze Gavilan
  * @project SearChems
@@ -11,5 +13,5 @@ package com.gavilan.searchems.indexacion.services;
 public interface IndexingService {
     void indexar();
 
-    void indexarDocumento();
+    void indexarDocumento(File file);
 }

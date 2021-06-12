@@ -3,7 +3,6 @@ package com.gavilan.searchems.indexacion.services.impl;
 import com.gavilan.searchems.documentos.util.DocumentoConstants;
 import com.gavilan.searchems.indexacion.services.IndexingService;
 import com.gavilan.searchems.posteo.services.ListaPosteoCreationService;
-import com.gavilan.searchems.vocabulario.domain.Vocabulario;
 import com.gavilan.searchems.vocabulario.services.VocabularioLoaderService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,11 +28,10 @@ public class IndexingServiceImpl implements IndexingService {
         File documentosDir = obtenerDirectorioDocumentos();
         crearListaPosteo(documentosDir);
         cargarVocabulario();
-        Vocabulario.getInstance().findVocabularioEntrada("many").ifPresent(System.out::println);
     }
 
     @Override
-    public void indexarDocumento() {
+    public void indexarDocumento(File file) {
 
     }
 
