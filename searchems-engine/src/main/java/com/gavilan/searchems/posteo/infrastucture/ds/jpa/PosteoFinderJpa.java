@@ -4,6 +4,7 @@ import com.gavilan.searchems.posteo.infrastucture.ds.PosteoFinderDsGateway;
 import com.gavilan.searchems.posteo.infrastucture.entities.Posteo;
 import com.gavilan.searchems.posteo.infrastucture.repositories.PosteoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -17,9 +18,10 @@ import java.util.List;
  * @date 1/6/2021
  */
 @Service
+@Profile({"mysql", "mysql-qa"})
 public class PosteoFinderJpa implements PosteoFinderDsGateway {
 
-    private final PosteoRepository posteoRepository;
+    protected final PosteoRepository posteoRepository;
 
     @Autowired
     public PosteoFinderJpa(PosteoRepository posteoRepository) {

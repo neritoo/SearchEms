@@ -17,4 +17,7 @@ public interface PosteoRepository extends JpaRepository<Posteo, String> {
 
     @Query(value = "SELECT EXISTS (SELECT NULL FROM posteos)", nativeQuery = true)
     int estaListaCargada();
+
+    @Query(value = "SELECT EXISTS (SELECT NULL FROM posteos)", nativeQuery = true)
+    boolean listaCargada();
 }
