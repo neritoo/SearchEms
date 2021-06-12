@@ -1,5 +1,9 @@
 package com.gavilan.searchems.posteo.services;
 
+import com.gavilan.searchems.documentos.infrastructure.entities.Documento;
+
+import java.io.File;
+
 /**
  * @author Eze Gavilan
  * @project SearChems
@@ -9,6 +13,6 @@ package com.gavilan.searchems.posteo.services;
  * <br>
  * ACLARACIÓN: No se encarga de la insersión en base de datos, que se hace al momento de indexación.
  */
-public interface PosteoEntradaCreationService {
-    void crearListaPosteo();
+public interface PosteoProcesadorService {
+    void procesarDocumentoPosteo(File documentoFile, Documento documento);
 }
