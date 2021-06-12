@@ -7,7 +7,6 @@ import com.gavilan.searchems.posteo.infrastucture.ds.PosteoIndexSqlCreationServi
 import com.gavilan.searchems.posteo.services.ListaPosteoCreationService;
 import com.gavilan.searchems.posteo.services.PosteoProcesadorService;
 import com.gavilan.searchems.posteo.services.PosteoValidadorExistenciaService;
-import com.gavilan.searchems.util.delimiter.Delimiter;
 import com.gavilan.searchems.util.files.DirectoryReaderService;
 import com.gavilan.searchems.util.files.exceptions.FileException;
 import lombok.AllArgsConstructor;
@@ -21,7 +20,6 @@ import java.util.List;
 @AllArgsConstructor
 @Slf4j
 public class ListaPosteoCreator implements ListaPosteoCreationService {
-    private static final String DELIMITER = Delimiter.DELIMITER;
 
     private final PosteoValidadorExistenciaService posteoValidadorExistenciaService;
     private final PosteoProcesadorService posteoProcesadorService;
