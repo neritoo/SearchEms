@@ -1,5 +1,6 @@
 package com.gavilan.searchems.buscador.controllers;
 
+import com.gavilan.searchems.buscador.dto.ConsultaRequest;
 import com.gavilan.searchems.buscador.services.BuscadorService;
 import com.gavilan.searchems.rankeo.domain.RankingDocumento;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,8 +10,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
@@ -33,13 +34,12 @@ public class BuscadorController {
     }
 
     @GetMapping("/buscador")
-    public ResponseEntity<?> buscarConsulta(@RequestParam(name = "page") Integer page,
-                                            @RequestParam(name = "consulta") String consulta) {
+    public ResponseEntity<?> buscarConsulta(@RequestBody ConsultaRequest consulta) {
         Map<String, Object> response = new HashMap<>();
-        Pageable pageable = PageRequest.of(page, 4);
+        Pageable pageable = PageRequest.of(consulta.getPage(), 4);
         Page<RankingDocumento> ranking;
 
-        ranking = this.buscadorService.buscarDocumentosConsulta(pageable, consulta);
+        ranking = this.buscadorService.buscarDocumentosConsulta(pageable, consulta.getConsulta());
 
         if (ranking.getContent().size() == 0) {
             response.put("mensaje", "Lista vacía");
