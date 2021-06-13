@@ -1,25 +1,22 @@
 package com.gavilan.searchems.documentos.infrastructure.ds.jpa;
 
 import com.gavilan.searchems.documentos.exceptions.DocumentoNoEncontradoException;
-import com.gavilan.searchems.documentos.infrastructure.ds.DocumentoFinderDsGateway;
+import com.gavilan.searchems.documentos.infrastructure.ds.DocumentoDsGateway;
 import com.gavilan.searchems.documentos.infrastructure.entities.Documento;
 import com.gavilan.searchems.documentos.infrastructure.repositories.DocumentoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-/**
- * @author Eze Gavilan
- * @project SearChems
- * @date 28/5/2021
- */
+import java.util.Collection;
+
 @Service
-public class DocumentoFinderJpa implements DocumentoFinderDsGateway {
+public class DocumentoJpa implements DocumentoDsGateway {
 
     private final DocumentoRepository documentoRepository;
 
     @Autowired
-    public DocumentoFinderJpa(DocumentoRepository documentoRepository) {
+    public DocumentoJpa(DocumentoRepository documentoRepository) {
         this.documentoRepository = documentoRepository;
     }
 
@@ -34,5 +31,17 @@ public class DocumentoFinderJpa implements DocumentoFinderDsGateway {
     @Override
     public long count() {
         return this.documentoRepository.count();
+    }
+
+    @Transactional
+    @Override
+    public Documento save(Documento documento) {
+        return this.documentoRepository.save(documento);
+    }
+
+    @Transactional
+    @Override
+    public void saveAll(Collection<Documento> documentoEntities) {
+        this.documentoRepository.saveAll(documentoEntities);
     }
 }

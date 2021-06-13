@@ -6,11 +6,6 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-/**
- * @author Eze Gavilan
- * @project SearChems
- * @date 28/5/2021
- */
 @Entity
 @Table(name = "documentos")
 @Data
