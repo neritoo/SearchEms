@@ -8,10 +8,6 @@ import java.util.Map;
 import java.util.Optional;
 
 /**
- * @author Eze Gavilan
- * @project SearChems
- * @date 27/5/2021
- *
  * Esta clase representa al Vocabulario de términos guardado en memoria principal.
  * <br>
  * Implementación del patrón Singleton, para tener una única instancia global con un único punto de

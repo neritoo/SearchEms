@@ -4,7 +4,7 @@ import com.gavilan.searchems.documentos.infrastructure.entities.Documento;
 import com.gavilan.searchems.documentos.services.DocumentoFactory;
 import com.gavilan.searchems.indexacion.services.IndexingService;
 import com.gavilan.searchems.posteo.services.PosteoProcesadorService;
-import com.gavilan.searchems.vocabulario.services.VocabularioLoaderService;
+import com.gavilan.searchems.vocabulario.services.VocabularioService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +20,7 @@ import java.io.File;
 public class IndexingServiceDocumento extends IndexingService {
 
     private final PosteoProcesadorService posteoProcesadorService;
-    private final VocabularioLoaderService vocabularioLoaderService;
+    private final VocabularioService vocabularioService;
     private final DocumentoFactory documentoFactory;
 
     @Override
@@ -30,7 +30,7 @@ public class IndexingServiceDocumento extends IndexingService {
 
     @Override
     public void cargarVocabulario() {
-        this.vocabularioLoaderService.cargarVocabulario();
+        this.vocabularioService.cargarVocabulario();
     }
 
     private Documento crearDocumento(String titulo) {

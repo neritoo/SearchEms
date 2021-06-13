@@ -13,11 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
-/**
- * @author Eze Gavilan
- * @project SearChems
- * @date 27/5/2021
- */
 @SpringBootTest
 @ActiveProfiles("mysql")
 class VocabularioServiceTest {
@@ -25,11 +20,7 @@ class VocabularioServiceTest {
     private final Logger log = LoggerFactory.getLogger(VocabularioServiceTest.class);
 
     @Autowired
-    VocabularioAgregadorService agregadorService;
-
-    @Autowired
-    VocabularioEntradaFinderService finderService;
-
+    VocabularioService vocabularioService;
     @BeforeEach
     void setUp() {
 
@@ -41,7 +32,7 @@ class VocabularioServiceTest {
 
         try {
             for (int i = 0; i < 100000; i++) {
-                agregadorService.agregarNuevaEntrada(UUID.randomUUID().toString(), 0, 0);
+                vocabularioService.agregarNuevaEntrada(UUID.randomUUID().toString(), 0, 0);
             }
         } catch (VocabularioException e) {
             e.printStackTrace();

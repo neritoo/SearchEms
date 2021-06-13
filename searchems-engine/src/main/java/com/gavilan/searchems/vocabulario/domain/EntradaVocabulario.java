@@ -3,11 +3,6 @@ package com.gavilan.searchems.vocabulario.domain;
 import lombok.Data;
 import lombok.ToString;
 
-/**
- * @author Eze Gavilan
- * @project SearChems
- * @date 27/5/2021
- */
 @Data
 @ToString
 public class EntradaVocabulario implements Comparable<EntradaVocabulario> {

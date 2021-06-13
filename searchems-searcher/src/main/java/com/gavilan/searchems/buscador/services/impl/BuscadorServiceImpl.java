@@ -5,7 +5,7 @@ import com.gavilan.searchems.documentos.services.DocumentoFinderService;
 import com.gavilan.searchems.rankeo.domain.RankingDocumento;
 import com.gavilan.searchems.rankeo.services.RankingService;
 import com.gavilan.searchems.vocabulario.domain.EntradaVocabulario;
-import com.gavilan.searchems.vocabulario.services.VocabularioEntradaFinderService;
+import com.gavilan.searchems.vocabulario.services.VocabularioService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -24,7 +24,7 @@ public class BuscadorServiceImpl implements BuscadorService {
     private static final int R = 30;
 
     private final DocumentoFinderService documentoFinderService;
-    private final VocabularioEntradaFinderService vocabularioEntradaFinderService;
+    private final VocabularioService vocabularioService;
     private final RankingService  rankingService;
 
     @Override
@@ -42,7 +42,7 @@ public class BuscadorServiceImpl implements BuscadorService {
 
         List<EntradaVocabulario> entradas = new ArrayList<>();
         palabras.forEach(palabra ->
-            this.vocabularioEntradaFinderService.find(palabra).ifPresent(entradas::add));
+            this.vocabularioService.find(palabra).ifPresent(entradas::add));
 
         return entradas;
     }

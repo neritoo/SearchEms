@@ -2,7 +2,7 @@ package com.gavilan.searchems.indexacion.services.impl;
 
 import com.gavilan.searchems.indexacion.services.IndexingService;
 import com.gavilan.searchems.posteo.services.ListaPosteoCreationService;
-import com.gavilan.searchems.vocabulario.services.VocabularioLoaderService;
+import com.gavilan.searchems.vocabulario.services.VocabularioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,13 +19,13 @@ public class IndexingServiceDirectorio extends IndexingService {
 
 
     private final ListaPosteoCreationService posteoCreationService;
-    private final VocabularioLoaderService vocabularioLoaderService;
+    private final VocabularioService vocabularioService;
 
     @Autowired
     public IndexingServiceDirectorio(ListaPosteoCreationService posteoCreationService,
-                                     VocabularioLoaderService vocabularioLoaderService) {
+                                     VocabularioService vocabularioService) {
         this.posteoCreationService = posteoCreationService;
-        this.vocabularioLoaderService = vocabularioLoaderService;
+        this.vocabularioService = vocabularioService;
     }
 
     @Override
@@ -35,6 +35,6 @@ public class IndexingServiceDirectorio extends IndexingService {
 
     @Override
     public void cargarVocabulario() {
-        this.vocabularioLoaderService.cargarVocabulario();
+        this.vocabularioService.cargarVocabulario();
     }
 }
