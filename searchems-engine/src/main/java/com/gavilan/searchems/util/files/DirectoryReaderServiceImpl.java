@@ -9,11 +9,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
 
-/**
- * @author Eze Gavilan
- * @project SearChems
- * @date 27/5/2021
- */
 @Service
 public class DirectoryReaderServiceImpl implements DirectoryReaderService {
 

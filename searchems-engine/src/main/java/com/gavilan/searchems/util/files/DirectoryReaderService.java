@@ -6,9 +6,7 @@ import java.io.File;
 import java.util.List;
 
 /**
- * @author Eze Gavilan
- * @project SearChems
- * @date 27/5/2021
+ * Servicio encargado de devolver listado de archivos de extensión requerida, dado un archivo directorio.
  */
 public interface DirectoryReaderService {
 
