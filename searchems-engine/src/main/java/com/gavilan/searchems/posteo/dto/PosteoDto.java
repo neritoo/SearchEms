@@ -6,11 +6,6 @@ import lombok.Data;
 
 import java.io.Serializable;
 
-/**
- * @author Eze Gavilan
- * @project SearchEms
- * @date 11/6/2021
- */
 @Data
 @Builder
 public class PosteoDto implements Serializable {

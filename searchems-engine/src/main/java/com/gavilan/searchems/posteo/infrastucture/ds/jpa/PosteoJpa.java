@@ -1,6 +1,6 @@
 package com.gavilan.searchems.posteo.infrastucture.ds.jpa;
 
-import com.gavilan.searchems.posteo.infrastucture.ds.PosteoFinderDsGateway;
+import com.gavilan.searchems.posteo.infrastucture.ds.PosteoDsGateway;
 import com.gavilan.searchems.posteo.infrastucture.entities.Posteo;
 import com.gavilan.searchems.posteo.infrastucture.repositories.PosteoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,22 +10,23 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collection;
 import java.util.List;
 
-/**
- * @author Eze Gavilan
- * @project SearChems
- * @date 1/6/2021
- */
 @Service
 @Profile({"mysql", "mysql-qa"})
-public class PosteoFinderJpa implements PosteoFinderDsGateway {
+public class PosteoJpa implements PosteoDsGateway {
 
     protected final PosteoRepository posteoRepository;
 
     @Autowired
-    public PosteoFinderJpa(PosteoRepository posteoRepository) {
+    public PosteoJpa(PosteoRepository posteoRepository) {
         this.posteoRepository = posteoRepository;
+    }
+
+    @Override
+    public void saveAll(Collection<Posteo> posteoList) {
+        this.posteoRepository.saveAll(posteoList);
     }
 
     @Transactional(readOnly = true)
@@ -38,13 +39,6 @@ public class PosteoFinderJpa implements PosteoFinderDsGateway {
     @Override
     public List<Posteo> findByTermino(String termino, int r) {
         return this.posteoRepository.findByPosteoPKTermino(termino, PageRequest.of(0, r, Sort.by(Sort.Direction.DESC, "terminoFrecuency")));
-    }
-
-    @Transactional(readOnly = true)
-    @Override
-    public boolean existsByTermino(String termino) {
-        return false;
-        //return this.posteoRepository.existsByTermino(termino);
     }
 
     @Transactional(readOnly = true)

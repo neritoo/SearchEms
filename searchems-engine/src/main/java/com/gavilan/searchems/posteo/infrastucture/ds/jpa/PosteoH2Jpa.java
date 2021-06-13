@@ -6,9 +6,9 @@ import org.springframework.stereotype.Service;
 
 @Service
 @Profile("h2")
-public class PosteoFinderH2Jpa extends PosteoFinderJpa {
+public class PosteoH2Jpa extends PosteoJpa {
 
-    public PosteoFinderH2Jpa(PosteoRepository posteoRepository) {
+    public PosteoH2Jpa(PosteoRepository posteoRepository) {
         super(posteoRepository);
     }
 

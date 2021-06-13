@@ -1,6 +1,6 @@
 package com.gavilan.searchems.posteo.services.impl;
 
-import com.gavilan.searchems.posteo.infrastucture.ds.PosteoFinderDsGateway;
+import com.gavilan.searchems.posteo.infrastucture.ds.PosteoDsGateway;
 import com.gavilan.searchems.posteo.services.PosteoValidadorExistenciaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -8,15 +8,15 @@ import org.springframework.stereotype.Service;
 @Service
 public class PosteoValidadorExistencia implements PosteoValidadorExistenciaService {
 
-    private final PosteoFinderDsGateway finderDsGateway;
+    private final PosteoDsGateway posteoDsGateway;
 
     @Autowired
-    public PosteoValidadorExistencia(PosteoFinderDsGateway finderDsGateway) {
-        this.finderDsGateway = finderDsGateway;
+    public PosteoValidadorExistencia(PosteoDsGateway posteoDsGateway) {
+        this.posteoDsGateway = posteoDsGateway;
     }
 
     @Override
     public boolean listaCargada() {
-        return this.finderDsGateway.loaded();
+        return this.posteoDsGateway.loaded();
     }
 }

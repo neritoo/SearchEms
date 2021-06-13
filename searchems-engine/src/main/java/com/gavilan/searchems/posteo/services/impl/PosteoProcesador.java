@@ -1,7 +1,7 @@
 package com.gavilan.searchems.posteo.services.impl;
 
 import com.gavilan.searchems.documentos.infrastructure.entities.Documento;
-import com.gavilan.searchems.posteo.infrastucture.ds.PosteoCreationDsGateway;
+import com.gavilan.searchems.posteo.infrastucture.ds.PosteoDsGateway;
 import com.gavilan.searchems.posteo.infrastucture.entities.Posteo;
 import com.gavilan.searchems.posteo.infrastucture.entities.PosteoPK;
 import com.gavilan.searchems.posteo.services.PosteoProcesadorService;
@@ -21,11 +21,11 @@ import java.util.Scanner;
 public class PosteoProcesador implements PosteoProcesadorService {
     private static final String DELIMITER = Delimiter.DELIMITER;
 
-    private final PosteoCreationDsGateway posteoCreationDsGateway;
+    private final PosteoDsGateway posteoDsGateway;
 
     @Autowired
-    public PosteoProcesador(PosteoCreationDsGateway posteoCreationDsGateway) {
-        this.posteoCreationDsGateway = posteoCreationDsGateway;
+    public PosteoProcesador(PosteoDsGateway posteoDsGateway) {
+        this.posteoDsGateway = posteoDsGateway;
     }
 
     @Override
@@ -51,6 +51,6 @@ public class PosteoProcesador implements PosteoProcesadorService {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        this.posteoCreationDsGateway.saveAll(currentDocumentMap.values());
+        this.posteoDsGateway.saveAll(currentDocumentMap.values());
     }
 }

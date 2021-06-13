@@ -79,7 +79,7 @@ public class ListaPosteoCreator implements ListaPosteoCreationService {
         return archivos;
     }
 
-    public void crearIndex() {
+    private void crearIndex() {
         this.posteoIndexCreator.createIndex();
     }
 }

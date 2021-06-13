@@ -7,6 +7,10 @@ import lombok.NoArgsConstructor;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
+/**
+ * Clase de entidad placeholder para luego mapear a EntradaVocabulario. NO se cargan nunca en la bd, solo
+ * sirven para el posterior mapeo de: termino, nr, y max frec.
+ */
 @Entity
 @Data
 @NoArgsConstructor
