@@ -7,9 +7,8 @@ import lombok.ToString;
 import java.io.Serializable;
 
 /**
- * @author Eze Gavilan
- * @project SearchEms
- * @date 10/6/2021
+ * Clase que representa un Documento calificado/por calificar con índice de relevancia, es decir, un
+ * Documento que pertenece a un ranking (ld).
  */
 @Getter
 @ToString

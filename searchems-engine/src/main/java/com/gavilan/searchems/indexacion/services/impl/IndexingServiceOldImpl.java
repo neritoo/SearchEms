@@ -10,11 +10,6 @@ import org.springframework.stereotype.Service;
 
 import java.io.File;
 
-/**
- * @author Eze Gavilan
- * @project SearChems
- * @date 28/5/2021
- */
 @Service
 @AllArgsConstructor
 @Slf4j

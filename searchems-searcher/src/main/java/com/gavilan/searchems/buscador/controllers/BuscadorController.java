@@ -18,9 +18,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @author Eze Gavilan
- * @project SearchEms
- * @date 9/6/2021
+ * API para la búsqueda de documentos a través de una consulta.
  */
 @RestController
 @RequestMapping("/api")
@@ -33,6 +31,14 @@ public class BuscadorController {
         this.buscadorService = buscadorService;
     }
 
+    /**
+     * API búsqueda. Genera un ranking con los mejores documentos de la búsqueda, y devuelve en forma
+     * paginada de acuerdo a la petición del cliente.
+     * @param consulta {@link ConsultaRequest} con la consulta realizada por cliente. Contiene:
+     *                                        String consulta con la consulta propiamente dicha.
+     *                                        int page con el número de página del ranking a generar.
+     * @return ResponseEntity con los documentos paginados.
+     */
     @GetMapping("/buscador")
     public ResponseEntity<?> buscarConsulta(@RequestBody ConsultaRequest consulta) {
         Map<String, Object> response = new HashMap<>();

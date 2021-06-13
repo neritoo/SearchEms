@@ -6,13 +6,9 @@ import com.gavilan.searchems.documentos.services.DocumentoFactory;
 import com.gavilan.searchems.documentos.util.DocumentoConstants;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-/**
- * @author Eze Gavilan
- * @project SearChems
- * @date 28/5/2021
- */
 @Service
 @Slf4j
 public class DocumentoEntityFactory implements DocumentoFactory {
@@ -21,7 +17,7 @@ public class DocumentoEntityFactory implements DocumentoFactory {
     private final DocumentoCreationDsGateway creationDsGateway;
 
     @Autowired
-    public DocumentoEntityFactory(String baseUrl, DocumentoCreationDsGateway creationDsGateway) {
+    public DocumentoEntityFactory(@Qualifier("BASE_URL") String baseUrl, DocumentoCreationDsGateway creationDsGateway) {
         this.baseUrl = baseUrl;
         this.creationDsGateway = creationDsGateway;
     }

@@ -1,32 +1,20 @@
 package com.gavilan.searchems.config;
 
+import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-/**
- * @author Eze Gavilan
- * @project SearChems
- * @date 28/5/2021
- *
- * Crea un BEAN para el endpoint de la baseUrl, definida en las propiedades de la aplicación.
- */
-@ConfigurationProperties(prefix = "searchems.endpoint")
+@ConfigurationProperties(
+        prefix = "searchems.endpoint"
+)
 @Configuration
+@Data
 public class EndpointConfig {
-
     private String baseUrl;
 
-    @Bean
+    @Bean(name = "BASE_URL")
     public String baseUrl() {
         return this.baseUrl;
-    }
-
-    public String getBaseUrl() {
-        return baseUrl;
-    }
-
-    public void setBaseUrl(String baseUrl) {
-        this.baseUrl = baseUrl;
     }
 }

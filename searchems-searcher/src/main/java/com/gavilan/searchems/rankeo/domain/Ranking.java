@@ -10,9 +10,9 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * @author Eze Gavilan
- * @project SearchEms
- * @date 11/6/2021
+ * Esta clase representa una abstracción utilizada para generar el ranking de documentos más relevantes dada
+ * una consulta. Esta clase de soporte encapsula la lógica para el manejo de la lista de documentos con sus
+ * índices de ranking.
  */
 @Getter
 public class Ranking implements Serializable {

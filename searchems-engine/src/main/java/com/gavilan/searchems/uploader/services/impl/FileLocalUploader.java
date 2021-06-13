@@ -1,9 +1,10 @@
 package com.gavilan.searchems.uploader.services.impl;
 
-import com.gavilan.searchems.documentos.util.DocumentoConstants;
 import com.gavilan.searchems.uploader.services.FileUploaderService;
 import com.gavilan.searchems.util.files.exceptions.FileException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -20,6 +21,13 @@ import java.nio.file.Paths;
 @Service
 @Slf4j
 public class FileLocalUploader implements FileUploaderService {
+
+    private final String indexDirectory;
+
+    @Autowired
+    public FileLocalUploader(@Qualifier("INDEX_DIRECTORY") String indexDirectory) {
+        this.indexDirectory = indexDirectory;
+    }
 
     @Override
     public File uploadFile(File file) throws FileException {
@@ -38,13 +46,11 @@ public class FileLocalUploader implements FileUploaderService {
 
         deleteOldFile(file);
         Path newFilePath = getPath(filename);
-        File newFile = newFilePath.toFile();
-        return newFile;
+        return newFilePath.toFile();
     }
 
     private Path getPath(String filename) {
-        String RUTA_DIR = DocumentoConstants.DIRECTORIO_DOCUMENTOS;
-        return Paths.get(RUTA_DIR).resolve(filename).toAbsolutePath();
+        return Paths.get(indexDirectory).resolve(filename).toAbsolutePath();
     }
 
     private void deleteOldFile(File file) {

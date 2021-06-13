@@ -3,7 +3,8 @@ package com.gavilan.searchems.documentos.services.impl;
 import com.gavilan.searchems.documentos.exceptions.DocumentoNoExisteException;
 import com.gavilan.searchems.documentos.infrastructure.entities.Documento;
 import com.gavilan.searchems.documentos.services.DocumentoDownloadService;
-import com.gavilan.searchems.documentos.util.DocumentoConstants;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
@@ -14,13 +15,15 @@ import java.net.MalformedURLException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-/**
- * @author Eze Gavilan
- * @project SearChems
- * @date 28/5/2021
- */
 @Service
 public class DocumentoDownloader implements DocumentoDownloadService {
+
+    private final String indexDirectory;
+
+    @Autowired
+    public DocumentoDownloader(@Qualifier("INDEX_DIRECTORY") String indexDirectory) {
+        this.indexDirectory = indexDirectory;
+    }
 
     @Override
     public byte[] descargarDocumento(Documento documento) throws DocumentoNoExisteException {
@@ -49,6 +52,6 @@ public class DocumentoDownloader implements DocumentoDownloadService {
      * @return {@link Path}.
      */
     private Path getPath(String filename) {
-        return Paths.get(DocumentoConstants.DIRECTORIO_DOCUMENTOS).resolve(filename).toAbsolutePath();
+        return Paths.get(indexDirectory).resolve(filename).toAbsolutePath();
     }
 }
