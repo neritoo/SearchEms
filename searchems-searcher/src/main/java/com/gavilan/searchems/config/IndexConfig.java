@@ -16,7 +16,7 @@ public class IndexConfig {
 
     @Bean(name = "INDEX_DIRECTORY")
     public String indexDirectory() {
-        return (indexDirectory == null || indexDirectory.isEmpty()) ?
+        return (indexDirectory == null || indexDirectory.isEmpty() || indexDirectory.isBlank()) ?
                 DocumentoConstants.DIRECTORIO_DOCUMENTOS : indexDirectory;
     }
 
