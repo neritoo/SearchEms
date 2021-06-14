@@ -10,6 +10,8 @@ package com.gavilan.searchems.posteo.infrastucture.ds;
  * Entonces, es lo ideal primero realizar la inserción global de las listas de posteos, que serán masivas solo en la carga
  * inicial, y luego recién crear el indice.
  */
-public interface PosteoIndexSqlCreationService {
+public interface PosteoIndexSqlService {
     void createIndex();
+
+    void deleteIndex();
 }

@@ -3,7 +3,7 @@ package com.gavilan.searchems.posteo.services.impl;
 import com.gavilan.searchems.documentos.infrastructure.entities.Documento;
 import com.gavilan.searchems.documentos.services.DocumentoFactory;
 import com.gavilan.searchems.indexacion.exceptions.IndexingException;
-import com.gavilan.searchems.posteo.infrastucture.ds.PosteoIndexSqlCreationService;
+import com.gavilan.searchems.posteo.infrastucture.ds.PosteoIndexSqlService;
 import com.gavilan.searchems.posteo.services.ListaPosteoCreationService;
 import com.gavilan.searchems.posteo.services.PosteoProcesadorService;
 import com.gavilan.searchems.posteo.services.PosteoValidadorExistenciaService;
@@ -23,7 +23,7 @@ public class ListaPosteoCreator implements ListaPosteoCreationService {
 
     private final PosteoValidadorExistenciaService posteoValidadorExistenciaService;
     private final PosteoProcesadorService posteoProcesadorService;
-    private final PosteoIndexSqlCreationService posteoIndexCreator;
+    private final PosteoIndexSqlService posteoIndexSqlService;
 
     private final DocumentoFactory documentoFactory;
     private final DirectoryReaderService directoryReaderService;
@@ -41,6 +41,7 @@ public class ListaPosteoCreator implements ListaPosteoCreationService {
         long start, end;
         float time;
 
+        eliminarIndex();
         log.info("Insertando en BD...");
         start = System.currentTimeMillis();
         int c = 0;
@@ -80,6 +81,10 @@ public class ListaPosteoCreator implements ListaPosteoCreationService {
     }
 
     private void crearIndex() {
-        this.posteoIndexCreator.createIndex();
+        this.posteoIndexSqlService.createIndex();
+    }
+
+    private void eliminarIndex() {
+        this.posteoIndexSqlService.deleteIndex();
     }
 }
