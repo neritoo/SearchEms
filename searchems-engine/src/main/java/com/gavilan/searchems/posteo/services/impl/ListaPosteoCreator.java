@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @AllArgsConstructor
@@ -44,10 +45,12 @@ public class ListaPosteoCreator implements ListaPosteoCreationService {
         eliminarIndex();
         log.info("Insertando en BD...");
         start = System.currentTimeMillis();
-        int c = 0;
+        int docActual = 0;
+        int cantDocs = Objects.requireNonNull(directorio.list()).length;
         for (File doc: archivos) {
-            c++;
-            log.info("Indexando documento: " + c);
+            docActual++;
+
+            ConsolePrinter.animate(((float) docActual/cantDocs) * 100 + " %");
             Documento documentoActual = crearDocumento(doc.getName());
             indexarDoc(doc, documentoActual);
         }
@@ -86,5 +89,40 @@ public class ListaPosteoCreator implements ListaPosteoCreationService {
 
     private void eliminarIndex() {
         this.posteoIndexSqlService.deleteIndex();
+    }
+
+    private static class ConsolePrinter {
+        private static String lastLine = "";
+        private static byte anim;
+
+        public static void print(String line) {
+            if (lastLine.length() > line.length()) {
+                String temp = "";
+                for (int i = 0; i < lastLine.length(); i++) {
+                    temp += " ";
+                }
+                if (temp.length() > 1) System.out.print("\r" + temp);
+            }
+            System.out.print("\r" + line);
+            lastLine = line;
+        }
+
+        public static void animate(String line) {
+            switch (anim) {
+                case 1:
+                    print("[ \\ ] " + line);
+                    break;
+                case 2:
+                    print("[ | ] " + line);
+                    break;
+                case 3:
+                    print("[ / ] " + line);
+                    break;
+                default:
+                    anim = 0;
+                    print("[ - ] " + line);
+            }
+            anim++;
+        }
     }
 }
