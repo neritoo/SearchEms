@@ -7,12 +7,15 @@ import com.gavilan.searchems.vocabulario.exceptions.VocabularioException;
 import com.gavilan.searchems.vocabulario.services.VocabularioService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
 @Service
+@EnableAsync
 @Slf4j
 public class VocabularioServiceImpl implements VocabularioService {
 
@@ -33,7 +36,8 @@ public class VocabularioServiceImpl implements VocabularioService {
         return Vocabulario.getInstance().findVocabularioEntrada(termino);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
+    @Async
     @Override
     public void cargarVocabulario() {
         long start, end;
