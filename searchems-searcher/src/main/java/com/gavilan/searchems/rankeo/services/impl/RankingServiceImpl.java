@@ -48,7 +48,9 @@ public class RankingServiceImpl implements RankingService {
     }
 
     private List<PosteoDto> obtenerPosteosTermino(List<EntradaVocabulario> terminos) {
-        return this.posteoFinder.findByTerminos(terminos);
+        List<String> terminosString = new ArrayList<>();
+        terminos.forEach(termino -> terminosString.add(termino.getTermino()));
+        return this.posteoFinder.findByTerminos(terminosString);
     }
 
     private void procesarTermino(Ranking ranking, List<PosteoDto> posteos, EntradaVocabulario termino, int N, int R) {
