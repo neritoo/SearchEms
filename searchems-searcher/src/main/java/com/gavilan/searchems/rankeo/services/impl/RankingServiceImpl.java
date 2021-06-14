@@ -35,7 +35,7 @@ public class RankingServiceImpl implements RankingService {
         List<PosteoDto> posteosTerminos = obtenerPosteosTermino(terminos);
 
         for (EntradaVocabulario termino: terminos) {
-            procesarTermino(ranking, posteosTerminos, termino, N);
+            procesarTermino(ranking, posteosTerminos, termino, N, R);
         }
 
         ranking.ordenarRanking();
@@ -51,13 +51,16 @@ public class RankingServiceImpl implements RankingService {
         return this.posteoFinder.findByTerminos(terminos);
     }
 
-    private void procesarTermino(Ranking ranking, List<PosteoDto> posteos, EntradaVocabulario termino, int N) {
-        List<PosteoDto> posteosTermino = filtrar(posteos, termino);
+    private void procesarTermino(Ranking ranking, List<PosteoDto> posteos, EntradaVocabulario termino, int N, int R) {
+        List<PosteoDto> posteosTermino = filtrarPosteosTermino(posteos, termino);
 
         for (PosteoDto posteo: posteosTermino) {
             DocumentoDto documentoActual = posteo.getDocumento();
             RankingDocumento rankingDocumento;
             if (ranking.obtenerDocumento(documentoActual).isEmpty()) {
+                // No agregar documentos si la lista está llena (con R documentos rankeados). En este caso, solo sumar
+                // los ir de los documentos ya existentes en ld (ranking).
+                if (ranking.size() >= R) break;
                 rankingDocumento = new RankingDocumento(documentoActual);
                 ranking.agregarDocumento(rankingDocumento);
             }
@@ -71,12 +74,15 @@ public class RankingServiceImpl implements RankingService {
         }
     }
 
-    private List<PosteoDto> filtrar(List<PosteoDto> posteos, EntradaVocabulario entrada) {
-        return posteos.stream().filter(posteo -> posteo.getTermino().equals(entrada.getTermino())).collect(Collectors.toList());
+    private List<PosteoDto> filtrarPosteosTermino(List<PosteoDto> posteos, EntradaVocabulario entrada) {
+        return posteos.stream()
+                .filter(posteo -> posteo.getTermino().equals(entrada.getTermino()))
+                .collect(Collectors.toList());
     }
 
     private float calcularPeso(int factor, int tf, int N, int nr) {
-        if (isStopWord(nr, N)) return 0.99f; // las stop words suman un valor fijo a todos los documentos
+        // las stop words suman un valor fijo a todos los documentos (deberían sumar algo, sino, no aparecerían si N=nr cuando buscamos una stop word).
+        if (isStopWord(nr, N)) return 0.99f;
         return (float) (Math.pow(2, factor) * tf * Math.log( ( (double) N / nr) ));
     }
 

@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @AllArgsConstructor
 public class BuscadorServiceImpl implements BuscadorService {
-    private static final int R = 30;
+    private static final int R = 15;
 
     private final DocumentoFinderService documentoFinderService;
     private final VocabularioService vocabularioService;
