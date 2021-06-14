@@ -33,18 +33,19 @@ public class RankingServiceImpl implements RankingService {
     public Page<RankingDocumento> generarRanking(Pageable pageable, List<EntradaVocabulario> terminos, int R, int N) {
         Ranking ranking = new Ranking();
         ordenarTerminosMayorIdf(terminos);
-        //terminos = terminos.stream().filter(t -> t.getCantDocumentos() < 500).collect(Collectors.toList());
-        //List<PosteoDto> posteosTerminos = obtenerPosteosTermino(terminos);
+        List<PosteoDto> posteosTerminos = obtenerPosteosTermino(terminos);
 
-        //for (EntradaVocabulario termino: terminos) {
-        //    procesarTerminov2(ranking, posteosTerminos, termino, N);
-        //}
+        for (EntradaVocabulario termino: terminos) {
+            procesarTerminov2(ranking, posteosTerminos, termino, N);
+        }
 
         //procesarTermino(ranking, terminos, R, N);
 
+        /*
         for (EntradaVocabulario termino: terminos) {
             procesarTermino(ranking, termino, R, N);
         }
+         */
 
         ranking.ordenarRanking();
         ranking.comprimirListaRanking(R);
@@ -104,7 +105,6 @@ public class RankingServiceImpl implements RankingService {
 
     private void procesarTerminov2(Ranking ranking, List<PosteoDto> posteos, EntradaVocabulario entradaVocabulario, int N) {
         posteos = filtrar(posteos, entradaVocabulario);
-        System.out.println(posteos);
 
         for (PosteoDto posteo: posteos) {
             DocumentoDto documentoActual = posteo.getDocumento();
@@ -136,8 +136,12 @@ public class RankingServiceImpl implements RankingService {
     }
 
     private float calcularPeso(int factor, int tf, int N, int nr) {
-        if ( ((float) nr/N) >= 0.85) return 0.99f;
-        return (float) (Math.pow(2, factor) * tf * Math.log( ( (float) N / nr) ));
+        if (isStopWord(nr, N)) return 0.99f; // las stop words suman un valor fijo a todos los documentos
+        return (float) (Math.pow(2, factor) * tf * Math.log( ( (double) N / nr) ));
+    }
+
+    private boolean isStopWord(int nr, int N) {
+        return ((float) nr/N) >= 0.85;
     }
 
     private Page<RankingDocumento> generarPaginacionRanking(Pageable pageable, Ranking ranking) {
