@@ -1,9 +1,9 @@
 spring:
   profiles:
-    active: mysql-qa
+    active: mysql
 
 searchems:
   endpoint:
     baseUrl: http://localhost:8080
   index:
-    indexDirectory: documentos\
+    indexDirectory: documentos/

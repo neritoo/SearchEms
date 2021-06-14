@@ -35,7 +35,10 @@ public class PosteoFinder implements PosteoFinderService {
 
     @Override
     public List<PosteoDto> findTopR(String termino, int r) {
-        return null;
+        return this.posteoDsGateway.findByTermino(termino, r)
+                .stream()
+                .map(this::mapToDto)
+                .collect(Collectors.toList());
     }
 
     @Override
