@@ -7,7 +7,6 @@ import com.gavilan.searchems.rankeo.domain.Ranking;
 import com.gavilan.searchems.rankeo.domain.RankingDocumento;
 import com.gavilan.searchems.rankeo.services.RankingService;
 import com.gavilan.searchems.vocabulario.domain.EntradaVocabulario;
-import com.gavilan.searchems.vocabulario.domain.Vocabulario;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -36,16 +35,8 @@ public class RankingServiceImpl implements RankingService {
         List<PosteoDto> posteosTerminos = obtenerPosteosTermino(terminos);
 
         for (EntradaVocabulario termino: terminos) {
-            procesarTerminov2(ranking, posteosTerminos, termino, N);
+            procesarTermino(ranking, posteosTerminos, termino, N);
         }
-
-        //procesarTermino(ranking, terminos, R, N);
-
-        /*
-        for (EntradaVocabulario termino: terminos) {
-            procesarTermino(ranking, termino, R, N);
-        }
-         */
 
         ranking.ordenarRanking();
         ranking.comprimirListaRanking(R);
@@ -56,34 +47,14 @@ public class RankingServiceImpl implements RankingService {
         terminos.sort(Comparator.reverseOrder());
     }
 
-    private void procesarTermino(Ranking ranking, List<EntradaVocabulario> entradas, int R, int N) {
-        List<PosteoDto> posteos = obtenerPosteosTermino(entradas);
-
-        for (PosteoDto posteo: posteos) {
-            DocumentoDto documentoActual = posteo.getDocumento();
-            RankingDocumento rankingDocumento;
-            if (ranking.obtenerDocumento(documentoActual).isEmpty()) {
-                rankingDocumento = new RankingDocumento(documentoActual);
-                ranking.agregarDocumento(rankingDocumento);
-            }
-            else {
-                rankingDocumento = ranking.obtenerDocumento(documentoActual).get();
-                rankingDocumento.setFactor(rankingDocumento.getFactor() + 1);
-            }
-
-            EntradaVocabulario entradaVocabulario = Vocabulario.getInstance().findVocabularioEntrada(posteo.getTermino())
-                    .orElse(null);
-            float peso = calcularPeso(rankingDocumento.getFactor(), posteo.getTf(), N, entradaVocabulario.getCantDocumentos());
-            rankingDocumento.aumentarIr(peso);
-        }
-
+    private List<PosteoDto> obtenerPosteosTermino(List<EntradaVocabulario> terminos) {
+        return this.posteoFinder.findByTerminos(terminos);
     }
 
-    private void procesarTermino(Ranking ranking, EntradaVocabulario entradaVocabulario, int R, int N) {
-        List<PosteoDto> posteos = obtenerPosteosTermino(entradaVocabulario.getTermino(), R);
-        System.out.println(posteos);
+    private void procesarTermino(Ranking ranking, List<PosteoDto> posteos, EntradaVocabulario termino, int N) {
+        List<PosteoDto> posteosTermino = filtrar(posteos, termino);
 
-        for (PosteoDto posteo: posteos) {
+        for (PosteoDto posteo: posteosTermino) {
             DocumentoDto documentoActual = posteo.getDocumento();
             RankingDocumento rankingDocumento;
             if (ranking.obtenerDocumento(documentoActual).isEmpty()) {
@@ -95,44 +66,13 @@ public class RankingServiceImpl implements RankingService {
                 rankingDocumento.setFactor(rankingDocumento.getFactor() + 1);
             }
 
-            float peso = calcularPeso(rankingDocumento.getFactor(), posteo.getTf(), N, entradaVocabulario.getCantDocumentos());
-            //if (( (double) entradaVocabulario.getCantDocumentos() / N) >= 0.85) // indice stop word...
-            //    peso = 0.999f;
-            rankingDocumento.aumentarIr(peso);
-        }
-
-    }
-
-    private void procesarTerminov2(Ranking ranking, List<PosteoDto> posteos, EntradaVocabulario entradaVocabulario, int N) {
-        posteos = filtrar(posteos, entradaVocabulario);
-
-        for (PosteoDto posteo: posteos) {
-            DocumentoDto documentoActual = posteo.getDocumento();
-            RankingDocumento rankingDocumento;
-            if (ranking.obtenerDocumento(documentoActual).isEmpty()) {
-                rankingDocumento = new RankingDocumento(documentoActual);
-                ranking.agregarDocumento(rankingDocumento);
-            }
-            else {
-                rankingDocumento = ranking.obtenerDocumento(documentoActual).get();
-                rankingDocumento.setFactor(rankingDocumento.getFactor() + 1);
-            }
-
-            float peso = calcularPeso(rankingDocumento.getFactor(), posteo.getTf(), N, entradaVocabulario.getCantDocumentos());
+            float peso = calcularPeso(rankingDocumento.getFactor(), posteo.getTf(), N, termino.getCantDocumentos());
             rankingDocumento.aumentarIr(peso);
         }
     }
 
     private List<PosteoDto> filtrar(List<PosteoDto> posteos, EntradaVocabulario entrada) {
         return posteos.stream().filter(posteo -> posteo.getTermino().equals(entrada.getTermino())).collect(Collectors.toList());
-    }
-
-    private List<PosteoDto> obtenerPosteosTermino(List<EntradaVocabulario> terminos) {
-        return this.posteoFinder.findByTerminos(terminos);
-    }
-
-    private List<PosteoDto> obtenerPosteosTermino(String termino, int R) {
-        return this.posteoFinder.findTopR(termino, R);
     }
 
     private float calcularPeso(int factor, int tf, int N, int nr) {
