@@ -1,6 +1,7 @@
 package com.gavilan.searchems.posteo.services;
 
 import com.gavilan.searchems.posteo.dto.PosteoDto;
+import com.gavilan.searchems.vocabulario.domain.EntradaVocabulario;
 
 import java.util.List;
 
@@ -24,4 +25,6 @@ public interface PosteoFinderService {
      * @return lista de r posteos del término.
      */
     List<PosteoDto> findTopR(String termino, int r);
+
+    List<PosteoDto> findByTerminos(List<EntradaVocabulario> terminos);
 }

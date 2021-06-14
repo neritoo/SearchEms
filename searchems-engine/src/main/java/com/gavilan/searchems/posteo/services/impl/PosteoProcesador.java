@@ -34,12 +34,15 @@ public class PosteoProcesador implements PosteoProcesadorService {
 
         try (Scanner fileScanner = new Scanner(new BufferedReader(new FileReader(documentoFile))) )  {
             fileScanner.useDelimiter(DELIMITER);
+
             String terminoActual;
 
             while (fileScanner.hasNext()) {
                 // cada palabra
                 terminoActual = fileScanner.next().toLowerCase();
+                if (terminoActual.length() < 2) continue;
                 if (terminoActual.isBlank()) continue;
+
                 Posteo p = currentDocumentMap.get(terminoActual);
                 if (p != null) {
                     p.aumentarFrecuency();

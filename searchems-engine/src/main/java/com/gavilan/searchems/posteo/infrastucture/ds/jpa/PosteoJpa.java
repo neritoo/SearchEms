@@ -43,6 +43,12 @@ public class PosteoJpa implements PosteoDsGateway {
 
     @Transactional(readOnly = true)
     @Override
+    public List<Posteo> findByTermino(List<String> terminos) {
+        return this.posteoRepository.findByListTermino(terminos);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
     public boolean loaded() {
         return this.posteoRepository.estaListaCargada() == 1;
     }

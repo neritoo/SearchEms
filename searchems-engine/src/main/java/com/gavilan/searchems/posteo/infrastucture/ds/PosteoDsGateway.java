@@ -17,6 +17,8 @@ public interface PosteoDsGateway {
 
     List<Posteo> findByTermino(String termino, int r);
 
+    List<Posteo> findByTermino(List<String> terminos);
+
     boolean loaded();
 
 }

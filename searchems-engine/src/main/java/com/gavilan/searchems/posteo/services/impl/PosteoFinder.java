@@ -5,9 +5,11 @@ import com.gavilan.searchems.posteo.dto.PosteoDto;
 import com.gavilan.searchems.posteo.infrastucture.ds.PosteoDsGateway;
 import com.gavilan.searchems.posteo.infrastucture.entities.Posteo;
 import com.gavilan.searchems.posteo.services.PosteoFinderService;
+import com.gavilan.searchems.vocabulario.domain.EntradaVocabulario;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,7 +35,14 @@ public class PosteoFinder implements PosteoFinderService {
 
     @Override
     public List<PosteoDto> findTopR(String termino, int r) {
-        return this.posteoDsGateway.findByTermino(termino, r)
+        return null;
+    }
+
+    @Override
+    public List<PosteoDto> findByTerminos(List<EntradaVocabulario> terminos) {
+        List<String> terminosString = new ArrayList<>();
+        terminos.forEach(term -> terminosString.add(term.getTermino()));
+        return this.posteoDsGateway.findByTermino(terminosString)
                 .stream()
                 .map(this::mapToDto)
                 .collect(Collectors.toList());

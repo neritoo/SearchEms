@@ -15,6 +15,9 @@ public interface PosteoRepository extends JpaRepository<Posteo, String> {
 
     List<Posteo> findByPosteoPKTermino(String termino, Pageable pageable);
 
+    @Query(value = "SELECT * FROM posteos WHERE termino IN (?1) ORDER BY termino_frecuency DESC",nativeQuery = true)
+    List<Posteo> findByListTermino(List<String> terminos);
+
     @Query(value = "SELECT EXISTS (SELECT NULL FROM posteos)", nativeQuery = true)
     int estaListaCargada();
 

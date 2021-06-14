@@ -1,7 +1,9 @@
 package com.gavilan.searchems.rankeo.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.gavilan.searchems.documentos.dto.DocumentoDto;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 
 import java.io.Serializable;
@@ -11,11 +13,14 @@ import java.io.Serializable;
  * Documento que pertenece a un ranking (ld).
  */
 @Getter
+@Setter
 @ToString
 public class RankingDocumento implements Serializable, Comparable<RankingDocumento> {
 
     private DocumentoDto documento;
     private float indiceRanking;
+    @JsonIgnore
+    private int factor;
 
     public RankingDocumento() {
 
@@ -24,6 +29,7 @@ public class RankingDocumento implements Serializable, Comparable<RankingDocumen
     public RankingDocumento(DocumentoDto documento) {
         this.documento = documento;
         this.indiceRanking = 0f;
+        this.factor = 0;
     }
 
     @Override
