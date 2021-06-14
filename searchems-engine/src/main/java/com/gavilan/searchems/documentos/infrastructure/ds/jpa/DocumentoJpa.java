@@ -22,9 +22,9 @@ public class DocumentoJpa implements DocumentoDsGateway {
 
     @Transactional(readOnly = true)
     @Override
-    public Documento findByTitulo(String id) throws DocumentoNoEncontradoException {
-        return this.documentoRepository.findById(id)
-                .orElseThrow(() -> new DocumentoNoEncontradoException("No eixste el documento " + id));
+    public Documento findByTitulo(String titulo) throws DocumentoNoEncontradoException {
+        return this.documentoRepository.findByTitulo(titulo)
+                .orElseThrow(() -> new DocumentoNoEncontradoException("No eixste el documento " + titulo));
     }
 
     @Transactional(readOnly = true)

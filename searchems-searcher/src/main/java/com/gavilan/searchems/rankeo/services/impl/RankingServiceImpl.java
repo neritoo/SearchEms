@@ -51,7 +51,6 @@ public class RankingServiceImpl implements RankingService {
 
     private void procesarTermino(Ranking ranking, List<EntradaVocabulario> entradas, int R, int N) {
         List<PosteoDto> posteos = obtenerPosteosTermino(entradas);
-        posteos.forEach(System.out::println);
 
         for (PosteoDto posteo: posteos) {
             DocumentoDto documentoActual = posteo.getDocumento();
@@ -115,8 +114,6 @@ public class RankingServiceImpl implements RankingService {
 
         if (start >= ranking.size()) currentPage = new ArrayList<>();
         else currentPage = ranking.getLd().subList(start, limit);
-
-        ranking.getLd().forEach(System.out::println);
 
         return new PageImpl<>(currentPage, pageable, ranking.size());
     }
