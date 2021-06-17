@@ -24,7 +24,7 @@ public class DocumentoJpa implements DocumentoDsGateway {
     @Override
     public Documento findByTitulo(String titulo) throws DocumentoNoEncontradoException {
         return this.documentoRepository.findByTitulo(titulo)
-                .orElseThrow(() -> new DocumentoNoEncontradoException("No eixste el documento " + titulo));
+                .orElseThrow(() -> new DocumentoNoEncontradoException("El documento \"".concat(titulo).concat("\" no está indexado")));
     }
 
     @Transactional(readOnly = true)

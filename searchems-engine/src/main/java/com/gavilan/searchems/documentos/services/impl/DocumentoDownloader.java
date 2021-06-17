@@ -34,13 +34,13 @@ public class DocumentoDownloader implements DocumentoDownloadService {
         try {
             resource = new UrlResource(rutaDocumento.toUri());
         } catch (MalformedURLException e) {
-            throw new DocumentoNoExisteException(e.getMessage());
+            throw new DocumentoNoExisteException("El archivo " + documento.getTitulo() + " no existe en el directorio");
         }
 
         try (InputStream inputStream = resource.getInputStream()) {
             content = inputStream.readAllBytes();
         } catch (IOException e) {
-            throw new DocumentoNoExisteException(e.getMessage());
+            throw new DocumentoNoExisteException("El archivo " + documento.getTitulo() + " no existe en el directorio");
         }
 
         return content;
